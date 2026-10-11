@@ -23,7 +23,10 @@
     rain:          $('[data-rain-toggle]'),
     actions:       $$('[data-action]'),
     modes:         $$('[data-route-mode]'),
-    journey:       $$('.patient-journey li')
+    journey:       $$('.patient-journey li'),
+    mobileTabs:    $$('[data-mobile-tab]'),
+    mobileNext:    $$('[data-mobile-next]'),
+    mobilePanel:   $('.patient-demo-grid')
   };
 
   var MEDICINES = {
@@ -42,6 +45,21 @@
     route: 'clear', target: 'a', selected: 'a',
     alternative: true, medicine: 'paracetamol'
   };
+  var activeMobileStep = 1;
+
+  function setMobileStep(step, focusTab) {
+    activeMobileStep = Math.max(1, Math.min(4, Number(step) || 1));
+    if (els.mobilePanel) {
+      els.mobilePanel.setAttribute('data-mobile-step', String(activeMobileStep));
+      els.mobilePanel.setAttribute('aria-labelledby', 'patient-tab-' + activeMobileStep);
+    }
+    els.mobileTabs.forEach(function (tab) {
+      var selected = Number(tab.getAttribute('data-mobile-tab')) === activeMobileStep;
+      tab.setAttribute('aria-selected', String(selected));
+      tab.setAttribute('tabindex', selected ? '0' : '-1');
+      if (selected && focusTab) tab.focus();
+    });
+  }
 
   /* -------- Journal -------- */
   function timestamp() {
@@ -192,14 +210,17 @@
       var a = btn.getAttribute('data-action');
       if (a === 'report' && state.route === 'clear') {
         apply({ route: 'reported' }, { log: { text: 'Usager · inondation signalée', tone: 'warn' } });
+        setMobileStep(3, false);
       } else if (a === 'confirm' && state.route === 'reported') {
         apply({ route: 'blocked', target: 'b' }, { log: { text: 'Agent · signalement confirmé', tone: 'danger' } });
+        setMobileStep(4, false);
         setTimeout(function () {
           log('Recalcul · itinéraire alternatif vers Pharmacie B', 'ok');
         }, 400);
       } else if (a === 'resolve' && state.route !== 'clear') {
         apply({ route: 'clear', target: state.selected },
               { log: { text: 'Route rétablie · historique conservé', tone: 'ok' } });
+        setMobileStep(2, false);
       }
     });
   });
@@ -221,6 +242,28 @@
       log('Recherche · ' + (MEDICINES[state.medicine] || ''), 'info');
     });
   }
+
+  /* -------- Étapes mobiles -------- */
+  els.mobileTabs.forEach(function (tab, index) {
+    tab.addEventListener('click', function () {
+      setMobileStep(tab.getAttribute('data-mobile-tab'), false);
+    });
+    tab.addEventListener('keydown', function (event) {
+      var nextIndex = index;
+      if (event.key === 'ArrowRight') nextIndex = (index + 1) % els.mobileTabs.length;
+      else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + els.mobileTabs.length) % els.mobileTabs.length;
+      else if (event.key === 'Home') nextIndex = 0;
+      else if (event.key === 'End') nextIndex = els.mobileTabs.length - 1;
+      else return;
+      event.preventDefault();
+      setMobileStep(els.mobileTabs[nextIndex].getAttribute('data-mobile-tab'), true);
+    });
+  });
+  els.mobileNext.forEach(function (button) {
+    button.addEventListener('click', function () {
+      setMobileStep(button.getAttribute('data-mobile-next'), true);
+    });
+  });
 
   /* -------- Journal : effacer -------- */
   if (els.journalClear) {
@@ -260,6 +303,7 @@
   });
 
   /* -------- Init -------- */
+  setMobileStep(activeMobileStep, false);
   apply({}, {});
   log('Recherche lancée · ' + MEDICINES[state.medicine], 'info');
   setTimeout(function () {

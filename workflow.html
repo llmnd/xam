@@ -506,6 +506,8 @@
       background: var(--bg-elev);
       box-shadow: var(--shadow-3);
     }
+    .patient-mobile-tabs { display: none; }
+    .patient-mobile-stage { display: contents; }
     .patient-demo-head {
       display: flex;
       align-items: flex-start;
@@ -1104,38 +1106,38 @@
        Dark mode
        ============================================================ */
     body.theme-dark {
-      --bg: #000000;
-      --bg-elev: #1c1c1e;
-      --ink: #f5f5f7;
-      --ink-strong: #f5f5f7;
-      --ink-2: #a1a1a6;
-      --ink-3: #86868b;
-      --line: rgba(255,255,255,.09);
-      --line-2: rgba(255,255,255,.16);
-      --soft: #2c2c2e;
-      --soft-2: #3a3a3c;
-      --accent: #0a84ff;
-      --accent-deep: #409cff;
-      --accent-soft: rgba(10,132,255,.16);
-      --success: #30d158;
-      --success-soft: rgba(48,209,88,.14);
-      --warn: #ffd60a;
-      --warn-soft: rgba(255,214,10,.12);
-      --danger: #ff453a;
-      --danger-soft: rgba(255,69,58,.14);
-      --shadow-1: 0 1px 2px rgba(0,0,0,.5);
-      --shadow-2: 0 8px 24px -12px rgba(0,0,0,.7);
-      --shadow-3: 0 24px 48px -24px rgba(0,0,0,.9);
+      --bg: #142337;
+      --bg-elev: #1b2e43;
+      --ink: #e2edf6;
+      --ink-strong: #e2edf6;
+      --ink-2: #b2c4d3;
+      --ink-3: #9bb0c1;
+      --line: #30465b;
+      --line-2: #405a72;
+      --soft: #203950;
+      --soft-2: #294762;
+      --accent: #78b7ee;
+      --accent-deep: #5e9fd7;
+      --accent-soft: rgba(120,183,238,.16);
+      --success: #54c69b;
+      --success-soft: rgba(84,198,155,.14);
+      --warn: #e4c99e;
+      --warn-soft: rgba(228,201,158,.12);
+      --danger: #ff8987;
+      --danger-soft: rgba(255,137,135,.14);
+      --shadow-1: 0 1px 2px rgba(0,0,0,.18);
+      --shadow-2: 0 8px 24px -12px rgba(0,0,0,.3);
+      --shadow-3: 0 24px 48px -24px rgba(0,0,0,.38);
     }
     body.theme-dark .sidebar,
-    body.theme-dark .topbar { background: rgba(28,28,30,.72); }
+    body.theme-dark .topbar { background: rgba(27,46,67,.9); }
     body.theme-dark .wf-flow-item:not(:last-child)::after { background: var(--line-2); }
     body.theme-dark .wf-node { background: var(--bg-elev); border-color: var(--line-2); }
     body.theme-dark .wf-flow-item:last-child .wf-node { background: var(--accent); }
     body.theme-dark .wf-rule { color: #e0d0b5; background: var(--warn-soft); border-color: rgba(255,214,10,.2); }
     body.theme-dark .wf-rule strong { color: #f7e8c6; }
-    body.theme-dark .patient-demo-head { background: linear-gradient(180deg, #1f1f22, #1c1c1e); }
-    body.theme-dark .patient-map-canvas { background: #17202a; }
+    body.theme-dark .patient-demo-head { background: linear-gradient(180deg, #203950, #1b2e43); }
+    body.theme-dark .patient-map-canvas { background: #203950; }
     body.theme-dark .patient-result-card.is-recommended {
       border-color: rgba(48,209,88,.4);
       background: rgba(48,209,88,.08);
@@ -1152,8 +1154,8 @@
     body.theme-dark .patient-decision.is-blocked { color: #f3c7c5; border-color: rgba(255,69,58,.35); background: var(--danger-soft); }
     body.theme-dark .patient-decision.is-blocked strong { color: #ffb1ab; }
     body.theme-dark.patient-focus-mode,
-    body.theme-dark.patient-focus-mode .patient-demo { background: #0d0d0f; }
-    body.theme-dark.patient-focus-mode .patient-demo-head { background: #1c1c1e; }
+    body.theme-dark.patient-focus-mode .patient-demo { background: #142337; }
+    body.theme-dark.patient-focus-mode .patient-demo-head { background: #1b2e43; }
 
     /* ============================================================
        Responsive
@@ -1195,13 +1197,117 @@
       .patient-demo-head p { font-size: 13.5px; }
       .patient-demo-tag { padding: 8px; }
       .patient-demo-tag .patient-focus-label { display: none; }
-      .patient-demo-grid { padding: 14px; }
-      .patient-search-panel { padding: 18px; }
+      .patient-journey { display: none; }
+      .patient-mobile-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+        padding: 10px 10px 0;
+        border-bottom: 1px solid var(--line);
+        background: var(--bg-elev);
+      }
+      .patient-mobile-tab {
+        display: grid;
+        justify-items: center;
+        align-content: start;
+        gap: 6px;
+        min-width: 0;
+        min-height: 63px;
+        padding: 3px 2px 10px;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        color: var(--ink-3);
+        background: transparent;
+        cursor: pointer;
+        font: 700 10px/1.2 var(--font);
+        text-align: center;
+        transition: color .16s var(--ease), border-color .16s var(--ease);
+      }
+      .patient-mobile-tab span {
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border: 1px solid var(--line-2);
+        border-radius: 50%;
+        color: var(--ink-2);
+        background: var(--soft);
+        font-size: 11px;
+        transition: color .16s var(--ease), background .16s var(--ease), border-color .16s var(--ease);
+      }
+      .patient-mobile-tab[aria-selected="true"] {
+        border-bottom-color: var(--accent);
+        color: var(--accent);
+      }
+      .patient-mobile-tab[aria-selected="true"] span {
+        border-color: var(--accent);
+        color: #fff;
+        background: var(--accent);
+      }
+      .patient-mobile-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+      .patient-demo-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 12px; }
+      .patient-search-panel,
+      .patient-map-panel { min-width: 0; padding: 15px; }
+      .patient-demo-grid > .patient-search-panel,
+      .patient-demo-grid > .patient-map-panel { display: none; }
+      .patient-mobile-stage { display: none; }
+      .patient-demo-grid[data-mobile-step="1"] .patient-search-panel,
+      .patient-demo-grid[data-mobile-step="2"] .patient-search-panel,
+      .patient-demo-grid[data-mobile-step="2"] .patient-map-panel,
+      .patient-demo-grid[data-mobile-step="3"] .patient-search-panel,
+      .patient-demo-grid[data-mobile-step="4"] .patient-map-panel { display: block; }
+      .patient-demo-grid[data-mobile-step="1"] .patient-mobile-search,
+      .patient-demo-grid[data-mobile-step="2"] .patient-mobile-route,
+      .patient-demo-grid[data-mobile-step="2"] .patient-mobile-map,
+      .patient-demo-grid[data-mobile-step="3"] .patient-mobile-report,
+      .patient-demo-grid[data-mobile-step="4"] .patient-mobile-decision {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .patient-demo-grid[data-mobile-step="1"] .patient-search-panel,
+      .patient-demo-grid[data-mobile-step="3"] .patient-search-panel,
+      .patient-demo-grid[data-mobile-step="4"] .patient-map-panel { align-self: start; }
+      .patient-mobile-search .patient-location-chip { margin: 5px 0 0; }
+      .patient-mobile-next {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 43px;
+        padding: 9px 12px;
+        border: 0;
+        border-radius: 10px;
+        color: #fff;
+        background: linear-gradient(135deg, #2879df, #175bb8);
+        cursor: pointer;
+        font: 700 13px var(--font);
+      }
+      .patient-mobile-next svg { width: 16px; height: 16px; }
+      .patient-mobile-next:focus-visible { outline: 3px solid var(--accent-soft); outline-offset: 2px; }
+      body.theme-dark .patient-mobile-next { background: linear-gradient(135deg, #347ad1, #2463ad); }
+      .patient-mobile-route .patient-scenario { margin-top: 0; padding-top: 0; border-top: 0; }
+      .patient-mobile-route .patient-mode-button { min-height: 46px; }
+      .patient-mobile-report .patient-actions,
+      .patient-mobile-report .patient-journal { margin-top: 0; padding-top: 0; border-top: 0; }
       .patient-map-top { flex-direction: column; align-items: flex-start; gap: 8px; }
-      .patient-map-svg, .patient-map-canvas { min-height: 220px; }
+      .patient-map-canvas { width: 100%; min-height: 0; margin: 0; aspect-ratio: 720 / 400; }
+      .patient-map-svg { min-height: 0; }
+      .patient-demo-grid[data-mobile-step="4"] .patient-mobile-decision { gap: 10px; }
+      .patient-demo-grid[data-mobile-step="4"] .patient-map-top { flex-direction: row; align-items: center; }
+      .patient-demo-grid[data-mobile-step="4"] .patient-map-canvas,
+      .patient-demo-grid[data-mobile-step="4"] .patient-map-legend { display: none; }
+      .patient-demo-grid[data-mobile-step="4"] .patient-results { grid-template-columns: minmax(0, 1fr); padding: 0; }
+      .patient-demo-grid[data-mobile-step="4"] .patient-decision { margin: 0; }
       .patient-results { grid-template-columns: 1fr; }
       .patient-disclaimer { margin: 0 14px 14px; }
       .page-footer { flex-direction: column; gap: 6px; }
+    }
+    @media (max-width: 600px) {
+      body.patient-focus-mode .patient-demo { grid-template-rows: auto auto minmax(0, 1fr) auto; }
+      body.patient-focus-mode .patient-demo-grid { overflow-y: auto; min-height: 0; }
+      body.patient-focus-mode .patient-mobile-tabs { max-width: 1600px; width: 100%; margin: 0 auto; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
@@ -1324,10 +1430,18 @@
     <li data-journey-step="4"><span>4</span>Décision</li>
   </ol>
 
-  <div class="patient-demo-grid">
+  <div class="patient-mobile-tabs" role="tablist" aria-label="Étapes de la simulation">
+    <button class="patient-mobile-tab" type="button" role="tab" id="patient-tab-1" aria-controls="patient-step-panel" aria-selected="true" tabindex="0" data-mobile-tab="1"><span>1</span>Recherche</button>
+    <button class="patient-mobile-tab" type="button" role="tab" id="patient-tab-2" aria-controls="patient-step-panel" aria-selected="false" tabindex="-1" data-mobile-tab="2"><span>2</span>Trajet</button>
+    <button class="patient-mobile-tab" type="button" role="tab" id="patient-tab-3" aria-controls="patient-step-panel" aria-selected="false" tabindex="-1" data-mobile-tab="3"><span>3</span>Signalement</button>
+    <button class="patient-mobile-tab" type="button" role="tab" id="patient-tab-4" aria-controls="patient-step-panel" aria-selected="false" tabindex="-1" data-mobile-tab="4"><span>4</span>Décision</button>
+  </div>
+
+  <div class="patient-demo-grid" id="patient-step-panel" role="tabpanel" aria-labelledby="patient-tab-1" data-mobile-step="1">
 
     <!-- Colonne gauche -->
     <form class="patient-search-panel" id="patient-search-form" onsubmit="return false;">
+      <div class="patient-mobile-stage patient-mobile-search">
       <label for="patient-medicine">Médicament recherché</label>
       <select id="patient-medicine" name="medicine">
         <option value="paracetamol">Paracétamol 500 mg</option>
@@ -1339,7 +1453,10 @@
         <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg></i>
         <span>Départ <strong>Médina · position de démonstration</strong></span>
       </div>
+      <button class="patient-mobile-next" type="button" data-mobile-next="2">Voir les itinéraires <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button>
+      </div>
 
+      <div class="patient-mobile-stage patient-mobile-route">
       <div class="patient-scenario">
         <span class="patient-scenario-label">État de la rue Blaise Diagne</span>
         <div class="patient-mode-buttons" role="group" aria-label="Choisir le scénario routier">
@@ -1348,7 +1465,10 @@
           <button class="patient-mode-button" type="button" data-route-mode="blocked" aria-pressed="false"><i class="patient-mode-dot blocked"></i>Bloquée · confirmée</button>
         </div>
       </div>
+      <button class="patient-mobile-next" type="button" data-mobile-next="3">Continuer vers le signalement <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button>
+      </div>
 
+      <div class="patient-mobile-stage patient-mobile-report">
       <!-- Actions du parcours -->
       <div class="patient-actions">
         <span class="patient-scenario-label">Actions du parcours</span>
@@ -1376,10 +1496,13 @@
         </div>
         <ol class="patient-journal-list" id="patient-journal-list" aria-live="polite"></ol>
       </div>
+      <button class="patient-mobile-next" type="button" data-mobile-next="4">Voir la décision <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button>
+      </div>
     </form>
 
     <!-- Colonne carte -->
     <div class="patient-map-panel">
+      <div class="patient-mobile-stage patient-mobile-map">
       <div class="patient-map-top">
         <div><strong>Pharmacies et itinéraires</strong><span id="patient-map-caption">Recherche simulée · secteur Médina</span></div>
         <span class="patient-map-state" id="patient-map-state" role="status" aria-live="polite">Trajet direct</span>
@@ -1480,7 +1603,9 @@
         <span><i class="legend-blocked"></i>Route bloquée</span>
         <span><i class="legend-alternative"></i>Alternative</span>
       </div>
+      </div>
 
+      <div class="patient-mobile-stage patient-mobile-decision">
       <div class="patient-results" aria-live="polite">
         <article class="patient-result-card is-recommended" data-pharmacy="a">
           <div class="patient-result-head">
@@ -1519,6 +1644,7 @@
           <strong id="patient-decision-title">Itinéraire direct disponible</strong>
           <p id="patient-decision-copy">Aucun incident confirmé sur le trajet. Vous pouvez partir.</p>
         </div>
+      </div>
       </div>
     </div>
   </div>
