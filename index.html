@@ -51,34 +51,45 @@
 
   <dialog class="login-screen" id="login-screen" aria-labelledby="login-title">
     <section class="login-card">
-      <a class="brand login-brand" href="index.html" aria-label="XamSaMed">
-        <span class="brand-name">XamSa<span>Med</span><small>LA SANTÉ, PLUS PROCHE</small></span>
-      </a>
-      <p class="eyebrow"><span class="eyebrow-line"></span>PROTOTYPE INTERACTIF</p>
-      <h1 id="login-title">Bienvenue dans<br>XamSaMed.</h1>
-      <p class="login-description">Choisissez un profil de démonstration pour essayer le parcours adapté à son rôle.</p>
-      <form id="login-form">
-        <label class="field-label" for="login-name">Votre nom</label>
-        <input class="form-control" id="login-name" name="name" maxlength="40" autocomplete="name" placeholder="Ex. Awa Diop" required>
-        <fieldset class="role-picker">
-          <legend class="field-label">Je me connecte en tant que</legend>
-          <label class="role-option selected" data-role-option="citizen">
-            <input type="radio" name="role" value="citizen" checked>
-            <span class="role-option-icon citizen-avatar">U</span>
-            <span><strong>Usager</strong><small>Je signale une route difficile</small></span>
-            <span class="role-radio"></span>
-          </label>
-          <label class="role-option" data-role-option="agent">
-            <input type="radio" name="role" value="agent">
-            <span class="role-option-icon agent-avatar">A</span>
-            <span><strong>Agent terrain</strong><small>Je collecte et vérifie les alertes</small></span>
-            <span class="role-radio"></span>
-          </label>
-        </fieldset>
-        <button class="button button-primary login-submit" type="submit">Entrer dans la démo <span>→</span></button>
-        <p class="login-disclaimer"><span>i</span>Connexion fictive : aucun mot de passe, compte ou serveur n’est utilisé.</p>
-        <p class="login-error" id="login-error" role="alert" hidden></p>
-      </form>
+      <aside class="login-editorial">
+        <a class="brand login-brand" href="index.html" aria-label="XamSaMed">
+          <span class="brand-name">XamSa<span>Med</span><small>LA SANTÉ, PLUS PROCHE</small></span>
+        </a>
+        <div class="login-editorial-copy">
+          <p class="login-location">DAKAR, EN MOUVEMENT</p>
+          <h2>La ville avance,<br>la santé aussi.</h2>
+          <span class="login-editorial-rule" aria-hidden="true"></span>
+          <p class="login-demo-credit">Ceci est une démo d’une tâche de Lamine.</p>
+        </div>
+        <p class="login-editorial-index">XAM / 01 — ESPACE DÉMO</p>
+      </aside>
+      <div class="login-panel">
+        <p class="eyebrow"><span class="eyebrow-line"></span>ACCÈS À L’ESPACE DÉMO</p>
+        <h1 id="login-title">Bienvenue.</h1>
+        <p class="login-description">Choisissez un profil pour découvrir le parcours adapté à votre rôle.</p>
+        <form id="login-form">
+          <label class="field-label" for="login-name">Votre nom</label>
+          <input class="form-control" id="login-name" name="name" maxlength="40" autocomplete="name" placeholder="Ex. Awa Diop" required>
+          <fieldset class="role-picker">
+            <legend class="field-label">Je me connecte en tant que</legend>
+            <label class="role-option selected" data-role-option="citizen">
+              <input type="radio" name="role" value="citizen" checked>
+              <span class="role-option-icon citizen-avatar">U</span>
+              <span><strong>Usager</strong><small>Je signale une route difficile</small></span>
+              <span class="role-radio"></span>
+            </label>
+            <label class="role-option" data-role-option="agent">
+              <input type="radio" name="role" value="agent">
+              <span class="role-option-icon agent-avatar">A</span>
+              <span><strong>Agent terrain</strong><small>Je collecte et vérifie les alertes</small></span>
+              <span class="role-radio"></span>
+            </label>
+          </fieldset>
+          <button class="button button-primary login-submit" type="submit">Entrer dans la démo <span>→</span></button>
+          <p class="login-disclaimer"><span>i</span>Connexion fictive : aucun mot de passe, compte ou serveur n’est utilisé.</p>
+          <p class="login-error" id="login-error" role="alert" hidden></p>
+        </form>
+      </div>
     </section>
   </dialog>
 

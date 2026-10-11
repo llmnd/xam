@@ -187,7 +187,10 @@
     var region = document.getElementById("toast-region");
     if (!region) return;
     window.clearTimeout(toastTimer);
-    region.innerHTML = '<div class="app-toast ' + (type === "error" ? "toast-error" : "toast-success") + '" role="status"><span>' + (type === "error" ? "!" : "✓") + '</span>' + escapeHtml(message) + '</div>';
+    var icon = type === "error"
+      ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></svg>'
+      : '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/></svg>';
+    region.innerHTML = '<div class="app-toast ' + (type === "error" ? "toast-error" : "toast-success") + '" role="status"><span>' + icon + '</span>' + escapeHtml(message) + '</div>';
     toastTimer = window.setTimeout(function () { region.innerHTML = ""; }, duration || 3600);
   }
 
@@ -217,17 +220,17 @@
     var voter = voterId();
     var canVote = !agentView && report.status !== "resolved";
     var markup = '<div class="community-votes" aria-label="Avis de la communauté">' +
-      '<div class="community-vote-summary"><span>👥</span><strong>' + votes.confirm.length +
+      '<div class="community-vote-summary"><svg class="community-people-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><strong>' + votes.confirm.length +
       '</strong> confirment le problème <span class="vote-separator">·</span><strong>' + votes.passable.length +
       '</strong> signalent un passage praticable</div>';
     if (canVote) {
       markup += '<div class="community-vote-actions">' +
         '<button class="community-vote-button' + (votes.confirm.includes(voter) ? ' is-selected' : '') +
         '" type="button" data-action="vote" data-vote="confirm" data-id="' + escapeHtml(report.id) +
-        '" aria-pressed="' + String(votes.confirm.includes(voter)) + '">👍 Je confirme</button>' +
+        '" aria-pressed="' + String(votes.confirm.includes(voter)) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>Je confirme</button>' +
         '<button class="community-vote-button' + (votes.passable.includes(voter) ? ' is-selected' : '') +
         '" type="button" data-action="vote" data-vote="passable" data-id="' + escapeHtml(report.id) +
-        '" aria-pressed="' + String(votes.passable.includes(voter)) + '">↗ C’est praticable</button>' +
+        '" aria-pressed="' + String(votes.passable.includes(voter)) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>C’est praticable</button>' +
         '</div><small class="community-vote-note">Votre avis aide l’équipe, mais ne remplace pas la vérification terrain.</small>';
     } else if (agentView) {
       markup += '<small class="community-vote-note">Avis des usagers · vérification terrain requise avant validation.</small>';
