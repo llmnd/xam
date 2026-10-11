@@ -1,0 +1,1606 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbfbfd">
+  <meta name="description" content="Workflow de démonstration XamSaMed pour les signalements de routes inondées et les itinéraires vers une pharmacie accessible.">
+  <title>XamSaMed — Workflow POC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-upgrade.css">
+  <style>
+    /* ============================================================
+       Design tokens — Apple-flavored
+       ============================================================ */
+    :root {
+      --bg: #fbfbfd;
+      --bg-elev: #ffffff;
+      --ink: #1d1d1f;
+      --ink-strong: #1d1d1f;
+      --ink-2: #6e6e73;
+      --ink-3: #86868b;
+      --line: rgba(0, 0, 0, .08);
+      --line-2: rgba(0, 0, 0, .12);
+      --soft: #f5f5f7;
+      --soft-2: #f0f0f2;
+      --accent: #0071e3;
+      --accent-deep: #0058b0;
+      --accent-soft: rgba(0, 113, 227, .09);
+      --success: #1f9d55;
+      --success-soft: rgba(31, 157, 85, .1);
+      --warn: #b7791f;
+      --warn-soft: rgba(183, 121, 31, .1);
+      --danger: #d13438;
+      --danger-soft: rgba(209, 52, 56, .09);
+      --radius-sm: 10px;
+      --radius: 14px;
+      --radius-lg: 20px;
+      --shadow-1: 0 1px 2px rgba(0,0,0,.04), 0 1px 1px rgba(0,0,0,.03);
+      --shadow-2: 0 6px 20px -8px rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-3: 0 20px 40px -20px rgba(0,0,0,.18), 0 2px 6px rgba(0,0,0,.04);
+      --ease: cubic-bezier(.4, 0, .2, 1);
+      --ease-out: cubic-bezier(.16, 1, .3, 1);
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+              "Manrope", "DM Sans", system-ui, "Segoe UI", Roboto, sans-serif;
+      --font-display: "Manrope", -apple-system, BlinkMacSystemFont,
+                      "SF Pro Display", system-ui, sans-serif;
+    }
+
+    /* ============================================================
+       Base + shell
+       ============================================================ */
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body {
+      font-family: var(--font);
+      color: var(--ink);
+      background: var(--bg);
+      letter-spacing: -.005em;
+    }
+    body * { box-sizing: border-box; }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      letter-spacing: -.025em;
+      font-weight: 700;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: rgba(251, 251, 253, .78);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      backdrop-filter: saturate(180%) blur(20px);
+      border-right: 1px solid var(--line);
+    }
+    .nav-link {
+      border-radius: 9px;
+      color: var(--ink-2);
+      font-weight: 500;
+      transition: background .16s var(--ease), color .16s var(--ease);
+    }
+    .nav-link:hover { background: rgba(0, 0, 0, .045); color: var(--ink); }
+    .nav-link.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .brand-name { letter-spacing: -.03em; }
+    .profile { border-top: 1px solid var(--line); }
+
+    /* Topbar */
+    .topbar {
+      background: rgba(251, 251, 253, .82);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+    .breadcrumb { color: var(--ink-2); font-weight: 500; }
+    .breadcrumb strong { color: var(--ink); font-weight: 600; }
+
+    /* Panels & buttons */
+    .panel {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-1);
+    }
+    .button {
+      border-radius: 11px;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      transition: transform .18s var(--ease-out), box-shadow .18s var(--ease),
+                  background .18s var(--ease), border-color .18s var(--ease);
+    }
+    .button-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 20px -12px rgba(0,113,227,.6);
+    }
+    .button-primary:hover {
+      background: var(--accent-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 14px 28px -14px rgba(0,113,227,.7);
+    }
+    .button-primary:active { transform: translateY(0); }
+    .button .arrow {
+      display: inline-flex;
+      width: 15px; height: 15px;
+      transition: transform .2s var(--ease-out);
+    }
+    .button:hover .arrow { transform: translate(2px, -2px); }
+    .button .arrow svg { width: 100%; height: 100%; }
+
+    /* ============================================================
+       Workflow — layout
+       ============================================================ */
+    .wf-content { max-width: 1060px; }
+
+    .wf-intro { margin-bottom: 4px; }
+    .wf-intro h1 { letter-spacing: -.035em; line-height: 1.06; }
+    .wf-intro .lead { max-width: 620px; color: var(--ink-2); }
+    .wf-caution {
+      margin: 14px 0 0;
+      padding-left: 12px;
+      border-left: 2px solid var(--line-2);
+      color: var(--ink-2);
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 620px;
+    }
+
+    .wf-section { margin-top: 72px; }
+    .wf-title {
+      margin: 0 0 8px;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      color: var(--ink);
+    }
+    .wf-sub {
+      margin: 0 0 28px;
+      color: var(--ink-2);
+      font-size: 15px;
+      line-height: 1.55;
+      max-width: 620px;
+    }
+
+    /* ---------- 1. Parcours ---------- */
+    .wf-flow {
+      list-style: none;
+      margin: 0;
+      padding: 6px 8px 6px 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+    .wf-flow-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 22px;
+      padding: 22px 0;
+    }
+    .wf-flow-item:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: 27px;
+      top: 78px;
+      bottom: -6px;
+      width: 1px;
+      background: var(--line-2);
+    }
+    .wf-node {
+      display: grid;
+      place-items: center;
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      color: var(--accent);
+      box-shadow: var(--shadow-1);
+      transition: transform .25s var(--ease-out), box-shadow .25s var(--ease);
+    }
+    .wf-node svg { width: 24px; height: 24px; }
+    .wf-flow-item:hover .wf-node {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-2);
+    }
+    .wf-flow-item:last-child .wf-node {
+      background: var(--accent);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 8px 22px -12px rgba(0,113,227,.8);
+    }
+    .wf-flow-body { padding-top: 4px; }
+    .wf-flow .step-label {
+      display: block;
+      margin: 0 0 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+    .wf-flow h3 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--ink);
+    }
+    .wf-flow p {
+      margin: 0;
+      max-width: 480px;
+      color: var(--ink-2);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    .wf-flow .step-owner {
+      align-self: center;
+      padding: 6px 11px;
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--ink-2);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -.005em;
+      white-space: nowrap;
+    }
+    .wf-context {
+      margin: 26px 0 0;
+      padding-left: 78px;
+      color: var(--ink-3);
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    /* ---------- Statuts ---------- */
+    .wf-statuses {
+      display: grid;
+      grid-template-columns: 1fr 20px 1fr 20px 1fr;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .wf-status {
+      padding: 22px 20px;
+      transition: transform .22s var(--ease-out), box-shadow .22s var(--ease);
+    }
+    .wf-status:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-2);
+    }
+    .wf-status strong {
+      display: block;
+      margin: 14px 0 6px;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.4;
+      font-weight: 600;
+      letter-spacing: -.01em;
+    }
+    .wf-status span.wf-effect {
+      display: inline-block;
+      color: var(--ink-3);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .wf-arrow {
+      display: grid;
+      place-items: center;
+      color: var(--ink-3);
+      opacity: .55;
+    }
+    .wf-arrow svg { width: 16px; height: 16px; }
+
+    .wf-rule {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 24px 0 0;
+      padding: 15px 16px;
+      border-radius: var(--radius);
+      background: var(--warn-soft);
+      border: 1px solid rgba(183,121,31,.18);
+      color: #6b5742;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+    .wf-rule b {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: rgba(183,121,31,.22);
+      color: var(--warn);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .wf-rule strong { color: #4f3f2e; }
+
+    .wf-more { margin-top: 16px; }
+    .wf-more summary {
+      width: fit-content;
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 13.5px;
+      font-weight: 600;
+      list-style: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color .16s var(--ease);
+    }
+    .wf-more summary::-webkit-details-marker { display: none; }
+    .wf-more summary::before {
+      content: "";
+      width: 6px; height: 6px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(-45deg) translate(-1px, 1px);
+      transition: transform .2s var(--ease-out);
+    }
+    .wf-more[open] summary::before { transform: rotate(45deg) translate(-1px, -1px); }
+    .wf-more summary:hover { color: var(--accent-deep); }
+    .wf-more[open] summary { margin-bottom: 10px; }
+    .wf-more p {
+      margin: 0;
+      max-width: 640px;
+      color: var(--ink-2);
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+    .wf-more ol {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding-left: 20px;
+      color: var(--ink-2);
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    .wf-more ol strong { color: var(--ink); font-weight: 600; }
+
+    /* ---------- Plan 5 semaines ---------- */
+    .wf-timeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 24px;
+    }
+    .wf-week {
+      position: relative;
+      padding-top: 28px;
+    }
+    .wf-week::before {
+      content: "";
+      position: absolute;
+      top: 5px;
+      left: 0; right: -24px;
+      height: 1px;
+      background: var(--line-2);
+    }
+    .wf-week:last-child::before {
+      right: 0;
+      background: linear-gradient(90deg, var(--line-2), transparent);
+    }
+    .wf-week::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: var(--bg-elev);
+      border: 2px solid var(--accent);
+      transition: transform .25s var(--ease-out);
+    }
+    .wf-week:hover::after { transform: scale(1.25); }
+    .wf-week small {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink-3);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .wf-week h3 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      color: var(--ink);
+    }
+    .wf-week span {
+      display: block;
+      color: var(--ink-2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* ---------- Stack ---------- */
+    .wf-stack {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .wf-tech {
+      padding: 20px;
+      border-radius: var(--radius);
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-1);
+      transition: transform .22s var(--ease-out), box-shadow .22s var(--ease),
+                  border-color .22s var(--ease);
+    }
+    .wf-tech:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-2);
+      box-shadow: var(--shadow-2);
+    }
+    .wf-tech .tech-badge {
+      display: grid;
+      place-items: center;
+      width: 36px; height: 36px;
+      margin-bottom: 16px;
+      border-radius: 10px;
+      background: var(--soft);
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+    .wf-tech .tech-badge svg { width: 18px; height: 18px; }
+    .wf-tech .flutter-badge { background: rgba(0,113,227,.12); color: #0064c8; }
+    .wf-tech .laravel-badge { background: rgba(209,52,56,.1); color: #b02a30; }
+    .wf-tech .postgres-badge { background: rgba(52,68,122,.1); color: #34447a; }
+    .wf-tech .open-badge { background: rgba(31,157,85,.1); color: #157c42; }
+    .wf-tech strong {
+      display: block;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -.01em;
+    }
+    .wf-tech span.wf-tech-desc {
+      display: block;
+      margin-top: 4px;
+      color: var(--ink-2);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .wf-tech .tech-role {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: var(--soft);
+      color: var(--ink-3);
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .wf-notes {
+      margin: 22px 0 0;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-3);
+      font-size: 12.5px;
+      line-height: 1.7;
+      max-width: 780px;
+    }
+
+    /* ============================================================
+       Simulation patient
+       ============================================================ */
+    .patient-demo {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--bg-elev);
+      box-shadow: var(--shadow-3);
+    }
+    .patient-demo-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 32px 32px 22px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fafbfd, #ffffff);
+    }
+    .patient-demo-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: var(--ink-2);
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .patient-demo-kicker::before {
+      content: "";
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 0 0 rgba(31,157,85,.45);
+      animation: pulse-dot 2.4s var(--ease) infinite;
+    }
+    @keyframes pulse-dot {
+      0%   { box-shadow: 0 0 0 0 rgba(31,157,85,.45); }
+      70%  { box-shadow: 0 0 0 8px rgba(31,157,85,0); }
+      100% { box-shadow: 0 0 0 0 rgba(31,157,85,0); }
+    }
+    .patient-demo-head h3 {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3vw, 34px);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -.04em;
+      max-width: 720px;
+    }
+    .patient-demo-head p {
+      max-width: 620px;
+      margin: 10px 0 0;
+      color: var(--ink-2);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    .patient-demo-tag {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 13px;
+      border: 1px solid var(--line-2);
+      border-radius: 10px;
+      color: var(--ink-2);
+      background: var(--bg-elev);
+      cursor: pointer;
+      font: 600 12.5px var(--font);
+      letter-spacing: -.005em;
+      transition: background .16s var(--ease), border-color .16s var(--ease),
+                  color .16s var(--ease), transform .16s var(--ease-out);
+    }
+    .patient-demo-tag:hover {
+      color: var(--ink);
+      border-color: var(--line-2);
+      background: var(--soft);
+      transform: translateY(-1px);
+    }
+    .patient-demo-tag svg { width: 14px; height: 14px; }
+
+    .patient-demo-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, .72fr) minmax(0, 1.28fr);
+      gap: 20px;
+      padding: 24px;
+    }
+
+    /* Panneau recherche */
+    .patient-search-panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-elev);
+    }
+    .patient-search-panel label {
+      display: block;
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: -.005em;
+    }
+    .patient-search-panel select {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 38px 0 13px;
+      border: 1px solid var(--line-2);
+      border-radius: var(--radius-sm);
+      color: var(--ink);
+      background: var(--bg-elev) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236e6e73' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>") no-repeat right 13px center/14px 14px;
+      font: 500 15px var(--font);
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color .16s var(--ease), box-shadow .16s var(--ease);
+    }
+    .patient-search-panel select:hover { border-color: #b6b6bb; }
+    .patient-search-panel select:focus-visible {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+    .patient-location-chip {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin: 14px 0 18px;
+      padding: 12px 13px;
+      border-radius: var(--radius-sm);
+      color: var(--ink-2);
+      background: var(--soft);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .patient-location-chip i {
+      display: grid;
+      place-items: center;
+      width: 26px; height: 26px;
+      flex: 0 0 auto;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--accent);
+      font-style: normal;
+    }
+    .patient-location-chip i svg { width: 14px; height: 14px; }
+    .patient-location-chip strong {
+      display: block;
+      margin-top: 1px;
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .patient-search-panel .patient-simulate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 48px;
+      border: 0;
+      border-radius: var(--radius-sm);
+      color: #fff;
+      background: var(--accent);
+      cursor: pointer;
+      font: 600 15px var(--font);
+      letter-spacing: -.005em;
+      transition: background .16s var(--ease), transform .16s var(--ease-out),
+                  box-shadow .16s var(--ease);
+      box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 20px -12px rgba(0,113,227,.6);
+    }
+    .patient-search-panel .patient-simulate:hover {
+      background: var(--accent-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 14px 28px -14px rgba(0,113,227,.7);
+    }
+    .patient-search-panel .patient-simulate:active { transform: translateY(0); }
+    .patient-search-panel .patient-simulate svg { width: 15px; height: 15px; }
+    .patient-search-panel .patient-simulate:focus-visible,
+    .patient-mode-button:focus-visible { outline: 3px solid rgba(0,113,227,.35); outline-offset: 2px; }
+
+    .patient-scenario {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+    .patient-scenario-label {
+      display: block;
+      margin-bottom: 11px;
+      color: var(--ink-3);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .patient-mode-buttons { display: grid; gap: 6px; }
+    .patient-mode-button {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-height: 44px;
+      padding: 9px 12px;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      color: var(--ink-2);
+      background: var(--soft);
+      cursor: pointer;
+      text-align: left;
+      font: 500 13.5px var(--font);
+      letter-spacing: -.005em;
+      transition: background .16s var(--ease), color .16s var(--ease),
+                  border-color .16s var(--ease);
+    }
+    .patient-mode-button:hover { background: var(--soft-2); color: var(--ink); }
+    .patient-mode-button[aria-pressed="true"] {
+      background: var(--bg-elev);
+      border-color: var(--line-2);
+      color: var(--ink);
+      font-weight: 600;
+      box-shadow: var(--shadow-1);
+    }
+    .patient-mode-dot {
+      width: 9px; height: 9px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--success);
+    }
+    .patient-mode-dot.reported { background: #e0a637; }
+    .patient-mode-dot.blocked { background: var(--danger); }
+
+    /* Panneau carte */
+    .patient-map-panel {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-elev);
+    }
+    .patient-map-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px 12px;
+    }
+    .patient-map-top strong {
+      display: block;
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -.015em;
+    }
+    .patient-map-top span {
+      display: block;
+      margin-top: 3px;
+      color: var(--ink-3);
+      font-size: 12px;
+    }
+    .patient-map-state {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 6px;
+      margin: 0 !important;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: #157c42 !important;
+      background: var(--success-soft);
+      font-size: 11px !important;
+      font-weight: 700;
+      letter-spacing: .01em;
+      white-space: nowrap;
+      transition: background .25s var(--ease), color .25s var(--ease);
+    }
+    .patient-map-state::before {
+      content: "";
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .patient-map-state.is-reported { color: #92651e !important; background: var(--warn-soft); }
+    .patient-map-state.is-blocked { color: #b02a30 !important; background: var(--danger-soft); }
+
+    .patient-map-canvas {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      margin: 0 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: #eef3f1;
+      aspect-ratio: 720 / 400;
+      min-height: 0;
+    }
+    .patient-map-svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .patient-map-svg .map-blocked,
+    .patient-map-svg .map-detour,
+    .patient-map-svg .map-alert-symbol {
+      opacity: 0;
+      transition: opacity .3s var(--ease);
+    }
+    .patient-demo[data-route="clear"] .patient-map-svg .route-direct { opacity: 1; }
+    .patient-demo[data-route="reported"] .patient-map-svg .route-direct { opacity: .78; }
+    .patient-demo[data-route="reported"] .patient-map-svg .map-alert-symbol { opacity: 1; }
+    .patient-demo[data-route="blocked"] .patient-map-svg .route-direct { opacity: .12; }
+    .patient-demo .patient-map-svg .route-to-b { opacity: 0; }
+    .patient-demo[data-target="b"] .patient-map-svg .route-direct { opacity: 0; }
+    .patient-demo[data-target="b"] .patient-map-svg .route-to-b { opacity: 1; }
+    .patient-demo[data-route="reported"][data-target="b"] .patient-map-svg .route-to-b { opacity: .78; }
+    .patient-demo[data-route="blocked"][data-target="b"] .patient-map-svg .route-to-b { opacity: 0; }
+    .patient-demo[data-route="blocked"] .patient-map-svg .map-blocked,
+    .patient-demo[data-route="blocked"] .patient-map-svg .map-detour,
+    .patient-demo[data-route="blocked"] .patient-map-svg .map-alert-symbol { opacity: 1; }
+    .patient-demo[data-route="blocked"][data-alternative="false"] .patient-map-svg .map-detour { opacity: 0; }
+
+    .patient-map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      padding: 12px 18px 6px;
+      color: var(--ink-3);
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+    .patient-map-legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .patient-map-legend i {
+      width: 16px; height: 3px;
+      border-radius: 3px;
+      background: var(--accent);
+    }
+    .patient-map-legend .legend-blocked { background: var(--danger); }
+    .patient-map-legend .legend-alternative { background: var(--success); }
+
+    .patient-results {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      padding: 10px 14px 14px;
+    }
+    .patient-result-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--bg-elev);
+      transition: border-color .2s var(--ease), background .2s var(--ease),
+                  transform .2s var(--ease-out);
+    }
+    .patient-result-card:hover { transform: translateY(-1px); border-color: var(--line-2); }
+    .patient-result-card.is-recommended {
+      border-color: rgba(31,157,85,.4);
+      background: #f4fbf7;
+    }
+    .patient-result-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .patient-result-card strong {
+      display: block;
+      color: var(--ink);
+      font-size: 13.5px;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -.01em;
+    }
+    .patient-result-card small {
+      display: block;
+      margin-top: 3px;
+      color: var(--ink-3);
+      font-size: 11.5px;
+      line-height: 1.4;
+    }
+    .patient-result-card .result-badge {
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 3px 7px;
+      border-radius: 6px;
+      color: var(--ink-3);
+      background: var(--soft);
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+    .patient-result-card.is-recommended .result-badge {
+      color: #157c42;
+      background: rgba(31,157,85,.14);
+    }
+    .patient-result-card .result-route {
+      display: block;
+      margin-top: 9px;
+      color: var(--ink-2);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .patient-result-card .result-route.alternative { color: #157c42; }
+
+    .patient-result-card .patient-choose-pharmacy {
+      width: 100%;
+      min-height: 36px;
+      margin-top: 12px;
+      border: 1px solid var(--line-2);
+      border-radius: 8px;
+      color: var(--ink);
+      background: var(--bg-elev);
+      cursor: pointer;
+      font: 600 12.5px var(--font);
+      letter-spacing: -.005em;
+      transition: background .16s var(--ease), border-color .16s var(--ease),
+                  color .16s var(--ease);
+    }
+    .patient-result-card .patient-choose-pharmacy:hover:not(:disabled) {
+      background: var(--soft);
+      border-color: #b6b6bb;
+    }
+    .patient-result-card .patient-choose-pharmacy:disabled {
+      color: var(--ink-3);
+      border-color: var(--line);
+      background: var(--soft);
+      cursor: not-allowed;
+    }
+    .patient-demo[data-route="blocked"] .patient-result-card[data-pharmacy="a"] .patient-choose-pharmacy:disabled {
+      color: #b02a30;
+      border-color: rgba(209,52,56,.25);
+      background: var(--danger-soft);
+    }
+
+    .patient-decision {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin: 0 14px 14px;
+      padding: 13px 15px;
+      border: 1px solid rgba(31,157,85,.28);
+      border-radius: var(--radius-sm);
+      color: #2f5d47;
+      background: var(--success-soft);
+      transition: background .3s var(--ease), border-color .3s var(--ease);
+    }
+    .patient-decision-icon {
+      display: grid;
+      place-items: center;
+      width: 26px; height: 26px;
+      flex: 0 0 auto;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--success);
+    }
+    .patient-decision-icon svg { width: 15px; height: 15px; }
+    .patient-decision strong {
+      display: block;
+      color: #1b6741;
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: -.01em;
+      line-height: 1.35;
+    }
+    .patient-decision p {
+      margin: 3px 0 0;
+      color: #3e7361;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .patient-decision.is-caution {
+      border-color: rgba(183,121,31,.3);
+      color: #79633c;
+      background: var(--warn-soft);
+    }
+    .patient-decision.is-caution .patient-decision-icon { background: #c9903a; }
+    .patient-decision.is-caution strong { color: #7a5416; }
+    .patient-decision.is-blocked {
+      border-color: rgba(209,52,56,.28);
+      color: #754e51;
+      background: var(--danger-soft);
+    }
+    .patient-decision.is-blocked .patient-decision-icon { background: var(--danger); }
+    .patient-decision.is-blocked strong { color: #a02a30; }
+
+    .patient-disclaimer {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      margin: 0 24px 22px;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      color: var(--ink-3);
+      background: var(--soft);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .patient-disclaimer b {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 16px; height: 16px;
+      margin-top: 1px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--ink-3);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    /* Footer */
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 72px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      color: var(--ink-3);
+      font-size: 12.5px;
+    }
+
+    /* ============================================================
+       Focus mode
+       ============================================================ */
+    body.patient-focus-mode { overflow: hidden; background: #eef2f5; }
+    body.patient-focus-mode .sidebar,
+    body.patient-focus-mode .topbar { display: none; }
+    body.patient-focus-mode .main-area { width: 100%; height: 100vh; min-height: 100vh; margin: 0; }
+    body.patient-focus-mode .wf-content {
+      width: 100%; max-width: none; height: 100vh;
+      padding: 0; overflow: hidden;
+    }
+    body.patient-focus-mode .wf-content > :not(.patient-demo) { display: none; }
+    body.patient-focus-mode .patient-demo {
+      position: fixed;
+      z-index: 30;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 0;
+      margin: 0;
+      overflow: auto;
+      border: 0;
+      border-radius: 0;
+      background: #eef2f5;
+      box-shadow: none;
+    }
+    body.patient-focus-mode .patient-demo-head {
+      align-items: center;
+      max-width: 1600px; width: 100%;
+      margin: 0 auto;
+      padding: 15px 28px 10px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    body.patient-focus-mode .patient-demo-head h3 { font-size: clamp(26px, 2.6vw, 36px); }
+    body.patient-focus-mode .patient-demo-head p { font-size: 14.5px; }
+    body.patient-focus-mode .patient-demo-grid {
+      width: 100%; max-width: 1600px; height: 100%;
+      min-height: 0; align-items: stretch;
+      grid-template-columns: minmax(310px, .66fr) minmax(0, 1.34fr);
+      margin: 0 auto;
+      padding: 16px 28px 12px;
+    }
+    body.patient-focus-mode .patient-search-panel { align-self: stretch; padding: 24px; }
+    body.patient-focus-mode .patient-map-panel {
+      display: grid;
+      grid-template-rows: auto auto auto auto auto;
+      height: 100%;
+      min-height: 0;
+    }
+    body.patient-focus-mode .patient-map-canvas {
+      height: auto;
+      min-height: 0;
+      margin: 0 14px;
+      align-self: start;
+    }
+    body.patient-focus-mode .patient-map-svg { min-height: 0; }
+    body.patient-focus-mode .patient-map-top { padding: 12px 18px 9px; }
+    body.patient-focus-mode .patient-map-top strong { font-size: 18px; }
+    body.patient-focus-mode .patient-map-top span { font-size: 13px; }
+    body.patient-focus-mode .patient-map-state { font-size: 12px !important; }
+    body.patient-focus-mode .patient-map-legend { padding-top: 8px; padding-bottom: 8px; }
+    body.patient-focus-mode .patient-results { gap: 8px; padding: 0 12px 12px; }
+    body.patient-focus-mode .patient-result-card { padding: 11px 12px; }
+    body.patient-focus-mode .patient-result-card strong { font-size: 14px; }
+    body.patient-focus-mode .patient-result-card small,
+    body.patient-focus-mode .patient-result-card .result-route { font-size: 12.5px; }
+    body.patient-focus-mode .patient-result-card .patient-choose-pharmacy { min-height: 34px; margin-top: 8px; }
+    body.patient-focus-mode .patient-decision { gap: 10px; margin: 0 12px 12px; padding: 10px 12px; }
+    body.patient-focus-mode .patient-decision strong { font-size: 13px; }
+    body.patient-focus-mode .patient-decision p { margin-top: 2px; font-size: 12px; }
+    body.patient-focus-mode .patient-disclaimer {
+      width: calc(100% - 56px); max-width: 1544px;
+      margin: 0 auto 12px; padding: 9px 12px; font-size: 11.5px;
+    }
+
+    /* ============================================================
+       Dark mode
+       ============================================================ */
+    body.theme-dark {
+      --bg: #000000;
+      --bg-elev: #1c1c1e;
+      --ink: #f5f5f7;
+      --ink-strong: #f5f5f7;
+      --ink-2: #a1a1a6;
+      --ink-3: #86868b;
+      --line: rgba(255,255,255,.09);
+      --line-2: rgba(255,255,255,.16);
+      --soft: #2c2c2e;
+      --soft-2: #3a3a3c;
+      --accent: #0a84ff;
+      --accent-deep: #409cff;
+      --accent-soft: rgba(10,132,255,.16);
+      --success: #30d158;
+      --success-soft: rgba(48,209,88,.14);
+      --warn: #ffd60a;
+      --warn-soft: rgba(255,214,10,.12);
+      --danger: #ff453a;
+      --danger-soft: rgba(255,69,58,.14);
+      --shadow-1: 0 1px 2px rgba(0,0,0,.5);
+      --shadow-2: 0 8px 24px -12px rgba(0,0,0,.7);
+      --shadow-3: 0 24px 48px -24px rgba(0,0,0,.9);
+    }
+    body.theme-dark .sidebar,
+    body.theme-dark .topbar { background: rgba(28,28,30,.72); }
+    body.theme-dark .wf-flow-item:not(:last-child)::after { background: var(--line-2); }
+    body.theme-dark .wf-node { background: var(--bg-elev); border-color: var(--line-2); }
+    body.theme-dark .wf-flow-item:last-child .wf-node { background: var(--accent); }
+    body.theme-dark .wf-rule { color: #e0d0b5; background: var(--warn-soft); border-color: rgba(255,214,10,.2); }
+    body.theme-dark .wf-rule strong { color: #f7e8c6; }
+    body.theme-dark .patient-demo-head { background: linear-gradient(180deg, #1f1f22, #1c1c1e); }
+    body.theme-dark .patient-map-canvas { background: #17202a; }
+    body.theme-dark .patient-result-card.is-recommended {
+      border-color: rgba(48,209,88,.4);
+      background: rgba(48,209,88,.08);
+    }
+    body.theme-dark .patient-result-card.is-recommended .result-badge {
+      color: #a4e7b3;
+      background: rgba(48,209,88,.2);
+    }
+    body.theme-dark .patient-decision { color: #b8e7c8; border-color: rgba(48,209,88,.3); background: var(--success-soft); }
+    body.theme-dark .patient-decision strong { color: #a4e7b3; }
+    body.theme-dark .patient-decision p { color: #b9d8c4; }
+    body.theme-dark .patient-decision.is-caution { color: #e6d7a8; border-color: rgba(255,214,10,.3); background: var(--warn-soft); }
+    body.theme-dark .patient-decision.is-caution strong { color: #f7e8c6; }
+    body.theme-dark .patient-decision.is-blocked { color: #f3c7c5; border-color: rgba(255,69,58,.35); background: var(--danger-soft); }
+    body.theme-dark .patient-decision.is-blocked strong { color: #ffb1ab; }
+    body.theme-dark.patient-focus-mode,
+    body.theme-dark.patient-focus-mode .patient-demo { background: #0d0d0f; }
+    body.theme-dark.patient-focus-mode .patient-demo-head { background: #1c1c1e; }
+
+    /* ============================================================
+       Responsive
+       ============================================================ */
+    @media (max-width: 1000px) {
+      .wf-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .wf-timeline { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 40px; }
+      .wf-week::before { right: -24px; }
+    }
+    @media (max-width: 900px) {
+      .wf-statuses { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+      .wf-arrow { transform: rotate(90deg); padding: 4px 0; }
+      .patient-demo-grid { grid-template-columns: 1fr; gap: 14px; padding: 18px; }
+      .patient-disclaimer { margin: 0 18px 18px; }
+    }
+    @media (max-width: 760px) {
+      .wf-section { margin-top: 56px; }
+      .wf-flow { padding: 0; }
+      .wf-flow-item { grid-template-columns: 48px minmax(0, 1fr); gap: 16px; padding: 20px 0; }
+      .wf-flow-item:not(:last-child)::after { left: 23px; top: 66px; bottom: -6px; }
+      .wf-node { width: 48px; height: 48px; border-radius: 14px; }
+      .wf-node svg { width: 20px; height: 20px; }
+      .wf-flow h3 { font-size: 18px; }
+      .wf-flow p { font-size: 14.5px; }
+      .wf-flow .step-owner { grid-column: 2; justify-self: start; margin-top: 4px; }
+      .wf-context { padding-left: 64px; }
+    }
+    @media (max-width: 600px) {
+      .wf-timeline { grid-template-columns: minmax(0, 1fr); gap: 22px; padding-left: 4px; }
+      .wf-week { padding: 0 0 0 26px; }
+      .wf-week::before { top: 12px; bottom: -22px; left: 5px; right: auto; width: 1px; height: auto; }
+      .wf-week:last-child::before { display: none; }
+      .wf-week::after { top: 0; left: 0; }
+      .wf-stack { grid-template-columns: minmax(0, 1fr); }
+      .wf-context { padding-left: 0; }
+
+      .patient-demo-head { flex-direction: row; align-items: flex-start; padding: 22px 18px 16px; gap: 12px; }
+      .patient-demo-head h3 { font-size: 22px; }
+      .patient-demo-head p { font-size: 13.5px; }
+      .patient-demo-tag { padding: 8px; }
+      .patient-demo-tag .patient-focus-label { display: none; }
+      .patient-demo-grid { padding: 14px; }
+      .patient-search-panel { padding: 18px; }
+      .patient-map-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .patient-map-svg, .patient-map-canvas { min-height: 220px; }
+      .patient-results { grid-template-columns: 1fr; }
+      .patient-disclaimer { margin: 0 14px 14px; }
+      .page-footer { flex-direction: column; gap: 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+  <script src="theme.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="XamSaMed, accueil"><span class="brand-mark" aria-hidden="true"><span></span><span></span></span><span class="brand-name">XamSa<span>Med</span><small>LA SANTÉ, PLUS PROCHE</small></span></a>
+      <nav class="side-nav" aria-label="Navigation principale">
+        <a class="nav-link" href="index.html"><span class="nav-icon icon-grid"></span>Application</a>
+        <a class="nav-link" href="sources.html"><span class="nav-icon icon-layers"></span>Sources de données</a>
+        <a class="nav-link active" href="workflow.html" aria-current="page"><span class="nav-icon icon-route"></span>Workflow POC</a>
+        <a class="nav-link" href="presentation.html"><span class="nav-icon icon-meeting"></span>Présentation</a>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="profile"><div class="avatar">XM</div><div><strong>Équipe XamSaMed</strong><span>Challenge SALTIS · Dakar</span></div><span class="profile-menu">···</span></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumb"><a href="index.html">POC</a><span class="crumb-sep">/</span><strong>Workflow POC</strong></div>
+        <div class="topbar-actions"><div class="top-avatar">XM</div></div>
+      </header>
+
+      <div class="content wf-content">
+        <!-- 1. L'essentiel -->
+        <section class="welcome-row page-intro wf-intro">
+          <div>
+            <h1>Workflow<br></h1>
+          </div>
+        </section>
+
+        <!-- 2. Le parcours en 4 étapes -->
+        <section class="wf-section" aria-labelledby="wf-flow-title">
+          <h2 class="wf-title" id="wf-flow-title">De la recherche du soin à l'itinéraire</h2>
+          <p class="wf-sub">Quatre étapes pour comprendre le parcours. La simulation illustrative vient ensuite.</p>
+          <ol class="wf-flow">
+            <li class="wf-flow-item">
+              <span class="wf-node" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+              </span>
+              <div class="wf-flow-body">
+                <span class="step-label">01 · Patient</span>
+                <h3>Cherche un médicament</h3>
+                <p>Sa position et les pharmacies qui l'ont en stock.</p>
+              </div>
+              <span class="step-owner">Flutter · mobile</span>
+            </li>
+            <li class="wf-flow-item">
+              <span class="wf-node" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 22 2l-9 19-2-9-8-1Z"/></svg>
+              </span>
+              <div class="wf-flow-body">
+                <span class="step-label">02 · Routes</span>
+                <h3>Trace le trajet de base</h3>
+                <p>OSM fournit le réseau, OSRM calcule l'itinéraire.</p>
+              </div>
+              <span class="step-owner">OSM + OSRM</span>
+            </li>
+            <li class="wf-flow-item">
+              <span class="wf-node" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4"/><path d="M12 17.2h.01"/></svg>
+              </span>
+              <div class="wf-flow-body">
+                <span class="step-label">03 · Signalement</span>
+                <h3>Ajoute le terrain</h3>
+                <p>Position GPS, type, heure et statut de l'incident.</p>
+              </div>
+              <span class="step-owner">Flutter → Laravel → PostGIS</span>
+            </li>
+            <li class="wf-flow-item">
+              <span class="wf-node" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h7a4 4 0 0 0 4-4V7"/><path d="m11 4 4-3 4 3"/><path d="m11 10 4 3 4-3"/></svg>
+              </span>
+              <div class="wf-flow-body">
+                <span class="step-label">04 · Décision</span>
+                <h3>Vérifie avant de détourner</h3>
+                <p>Incident confirmé : détour si un trajet cohérent existe.</p>
+              </div>
+              <span class="step-owner">API Laravel</span>
+            </li>
+          </ol>
+          <p class="wf-context">Pluie et données historiques donnent du contexte, sans confirmer l'état d'une route.</p>
+        </section>
+
+        <section class="wf-section patient-demo"
+         aria-labelledby="patient-demo-title"
+         data-route="clear" data-target="a" data-selected="a"
+         data-alternative="true" data-rain="false">
+
+  <div class="patient-demo-head">
+    <div>
+      <span class="patient-demo-kicker">Illustration interactive · scénario fictif</span>
+      <h3 id="patient-demo-title">Un médicament. Un trajet plus sûr.</h3>
+      <p>Suivez le parcours d'un patient à Médina : recherche, itinéraire, signalement, décision. Toutes les données sont fictives.</p>
+    </div>
+    <div class="patient-demo-head-actions">
+      <button class="patient-demo-tag" type="button" data-rain-toggle aria-pressed="false" title="Simuler la pluie sur la carte">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14.9A4 4 0 0 1 6 7.5a5 5 0 0 1 9.6-1.4A4.2 4.2 0 0 1 20 14.9"/><path d="m8 19-1 2"/><path d="m12 19-1 2"/><path d="m16 19-1 2"/></svg>
+        <span class="patient-focus-label">Pluie</span>
+      </button>
+      <button class="patient-demo-tag" type="button" data-patient-focus aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/></svg>
+        <span class="patient-focus-label">Agrandir la simulation</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Stepper parcours -->
+  <ol class="patient-journey" aria-label="Étapes du parcours">
+    <li data-journey-step="1"><span>1</span>Recherche</li>
+    <li data-journey-step="2"><span>2</span>Trajet</li>
+    <li data-journey-step="3"><span>3</span>Signalement</li>
+    <li data-journey-step="4"><span>4</span>Décision</li>
+  </ol>
+
+  <div class="patient-demo-grid">
+
+    <!-- Colonne gauche -->
+    <form class="patient-search-panel" id="patient-search-form" onsubmit="return false;">
+      <label for="patient-medicine">Médicament recherché</label>
+      <select id="patient-medicine" name="medicine">
+        <option value="paracetamol">Paracétamol 500 mg</option>
+        <option value="serum">Sérum physiologique</option>
+        <option value="pansement">Pansements</option>
+      </select>
+
+      <div class="patient-location-chip">
+        <i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.4-7-11a7 7 0 1 1 14 0c0 4.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg></i>
+        <span>Départ <strong>Médina · position de démonstration</strong></span>
+      </div>
+
+      <div class="patient-scenario">
+        <span class="patient-scenario-label">État de la rue Blaise Diagne</span>
+        <div class="patient-mode-buttons" role="group" aria-label="Choisir le scénario routier">
+          <button class="patient-mode-button" type="button" data-route-mode="clear" aria-pressed="true"><i class="patient-mode-dot"></i>Ouverte</button>
+          <button class="patient-mode-button" type="button" data-route-mode="reported" aria-pressed="false"><i class="patient-mode-dot reported"></i>Signalée · à confirmer</button>
+          <button class="patient-mode-button" type="button" data-route-mode="blocked" aria-pressed="false"><i class="patient-mode-dot blocked"></i>Bloquée · confirmée</button>
+        </div>
+      </div>
+
+      <!-- Actions du parcours -->
+      <div class="patient-actions">
+        <span class="patient-scenario-label">Actions du parcours</span>
+        <div class="patient-action-buttons">
+          <button class="patient-action-btn" type="button" data-action="report">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+            Usager · signaler une inondation
+          </button>
+          <button class="patient-action-btn" type="button" data-action="confirm" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Agent · confirmer le blocage
+          </button>
+          <button class="patient-action-btn" type="button" data-action="resolve" disabled>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            Agent · marquer résolu
+          </button>
+        </div>
+      </div>
+
+      <!-- Journal -->
+      <div class="patient-journal">
+        <div class="patient-journal-head">
+          <span class="patient-journal-title">Journal</span>
+          <button class="patient-journal-clear" type="button" id="patient-journal-clear">Effacer</button>
+        </div>
+        <ol class="patient-journal-list" id="patient-journal-list" aria-live="polite"></ol>
+      </div>
+    </form>
+
+    <!-- Colonne carte -->
+    <div class="patient-map-panel">
+      <div class="patient-map-top">
+        <div><strong>Pharmacies et itinéraires</strong><span id="patient-map-caption">Recherche simulée · secteur Médina</span></div>
+        <span class="patient-map-state" id="patient-map-state" role="status" aria-live="polite">Trajet direct</span>
+      </div>
+
+      <div class="patient-map-canvas">
+        <svg class="patient-map-svg" viewBox="0 0 720 400" role="img"
+             aria-labelledby="patient-map-title patient-map-description"
+             preserveAspectRatio="xMidYMid meet">
+          <title id="patient-map-title">Carte schématique des routes et pharmacies</title>
+          <desc id="patient-map-description">Un trajet bleu relie le patient à une pharmacie. En cas de route impraticable confirmée, le tronçon devient rouge et un itinéraire alternatif vert apparaît.</desc>
+          <defs>
+            <pattern id="patient-map-grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#e1e8e5" stroke-width="1"/></pattern>
+            <filter id="patient-map-shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#1d1d1f" flood-opacity=".16"/></filter>
+          </defs>
+
+          <rect width="720" height="400" fill="#eef3f1"/>
+          <rect width="720" height="400" fill="url(#patient-map-grid)"/>
+          <path d="M0 36 136 0h65L43 400H0zm720 287L596 400h-72L720 224z" fill="#e2eef4" opacity=".9"/>
+          <path d="M-20 118 718 280M-10 356 680 45M100-20 337 420M434-20 252 420M-20 220 725 123M42 400 575 0" fill="none" stroke="#ffffff" stroke-width="15" stroke-linecap="round"/>
+          <path d="M-20 118 718 280M-10 356 680 45M100-20 337 420M434-20 252 420M-20 220 725 123M42 400 575 0" fill="none" stroke="#dde5e1" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- halo trajet direct -->
+          <path d="M95 296 183 262 276 239 344 205 403 176 435 151" fill="none" stroke="#0071e3" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" opacity=".12"/>
+
+          <!-- Trajet direct vers A -->
+          <path class="route-direct" id="p-direct" d="M95 296 183 262 276 239 344 205 403 176 435 151" fill="none" stroke="#0071e3" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="route-direct route-flow" d="M95 296 183 262 276 239 344 205 403 176 435 151" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-opacity=".75" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Trajet vers B -->
+          <path class="route-to-b" id="p-b" d="M95 296 139 336 242 347 345 330 454 343 548 322" fill="none" stroke="#0071e3" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="route-to-b route-flow" d="M95 296 139 336 242 347 345 330 454 343 548 322" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-opacity=".75" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Tronçon bloqué -->
+          <path class="map-blocked" d="M276 239 344 205 403 176" fill="none" stroke="#d13438" stroke-width="9" stroke-linecap="round"/>
+
+          <!-- Ripple + symbole incident -->
+          <g class="map-alert-symbol" transform="translate(350 202)">
+            <circle class="map-alert-ripple" r="15" cx="0" cy="0"/>
+            <circle r="20" fill="#fff" filter="url(#patient-map-shadow)"/>
+            <circle r="15" fill="#d13438"/>
+            <path d="M0-7.5v9m0 5.6v.4" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+          </g>
+
+          <!-- Détour vert -->
+          <path class="map-detour" id="p-detour" d="M95 296 139 336 242 347 345 330 454 343 548 322" fill="none" stroke="#1f9d55" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <path class="map-detour route-flow" d="M95 296 139 336 242 347 345 330 454 343 548 322" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-opacity=".8" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Pastilles mobiles sur les trajets -->
+          <g class="route-direct route-mover" aria-hidden="true">
+            <circle r="5" fill="#fff" stroke="#0071e3" stroke-width="2.5">
+              <animateMotion dur="5s" repeatCount="indefinite"><mpath href="#p-direct"/></animateMotion>
+            </circle>
+          </g>
+          <g class="route-to-b route-mover" aria-hidden="true">
+            <circle r="5" fill="#fff" stroke="#0071e3" stroke-width="2.5">
+              <animateMotion dur="6s" repeatCount="indefinite"><mpath href="#p-b"/></animateMotion>
+            </circle>
+          </g>
+          <g class="map-detour route-mover" aria-hidden="true">
+            <circle r="5" fill="#fff" stroke="#1f9d55" stroke-width="2.5">
+              <animateMotion dur="6s" repeatCount="indefinite"><mpath href="#p-detour"/></animateMotion>
+            </circle>
+          </g>
+
+          <!-- Marqueurs fixes -->
+          <g transform="translate(95 296)" filter="url(#patient-map-shadow)"><circle r="18" fill="#fff"/><circle r="12" fill="#0071e3"/><circle r="3.6" fill="#fff"/></g>
+          <g transform="translate(435 151)" filter="url(#patient-map-shadow)"><circle r="18" fill="#fff"/><circle r="13" fill="#1f9d55"/><path d="M-6 0h12M0-6v12" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></g>
+          <g transform="translate(548 322)" filter="url(#patient-map-shadow)"><circle r="18" fill="#fff"/><circle r="13" fill="#1f9d55"/><path d="M-6 0h12M0-6v12" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></g>
+
+          <!-- Étiquettes -->
+          <g fill="#fff" stroke="#e0e7e3" filter="url(#patient-map-shadow)">
+            <rect x="198" y="94" width="90" height="32" rx="9"/>
+            <rect x="492" y="195" width="102" height="32" rx="9"/>
+            <rect x="195" y="300" width="106" height="32" rx="9"/>
+          </g>
+          <g fill="#6e6e73" font-family="-apple-system, BlinkMacSystemFont, 'Manrope', sans-serif" font-size="11.5" font-weight="700" letter-spacing=".02em">
+            <text x="213" y="115">MÉDINA</text>
+            <text x="507" y="216">FANN</text>
+            <text x="210" y="321">CENTRE-VILLE</text>
+            <text x="34" y="331">VOUS</text>
+            <text x="388" y="116">PHARMACIE A</text>
+            <text x="508" y="359">PHARMACIE B</text>
+          </g>
+          <g class="map-blocked" transform="translate(403 174)">
+            <rect x="-52" y="-34" width="104" height="22" rx="11" fill="#fdecec"/>
+            <text y="-19" fill="#b02a30" font-family="-apple-system, BlinkMacSystemFont, 'Manrope', sans-serif" font-size="10" font-weight="800" text-anchor="middle" letter-spacing=".04em">ROUTE BLOQUÉE</text>
+          </g>
+          <g class="map-detour" transform="translate(366 365)">
+            <rect x="-64" y="-15" width="128" height="24" rx="12" fill="#e6f7ed"/>
+            <text y="1" fill="#157c42" font-family="-apple-system, BlinkMacSystemFont, 'Manrope', sans-serif" font-size="11" font-weight="800" text-anchor="middle" letter-spacing=".04em">ITINÉRAIRE ALTERNATIF</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="patient-map-legend" aria-label="Légende de la carte">
+        <span><i></i>Trajet</span>
+        <span><i class="legend-blocked"></i>Route bloquée</span>
+        <span><i class="legend-alternative"></i>Alternative</span>
+      </div>
+
+      <div class="patient-results" aria-live="polite">
+        <article class="patient-result-card is-recommended" data-pharmacy="a">
+          <div class="patient-result-head">
+            <div><strong>Pharmacie de la Médina</strong><small>Disponibilité simulée</small></div>
+            <span class="result-badge">PROCHE</span>
+          </div>
+          <div class="result-stock">
+            <span class="result-stock-label">Stock</span>
+            <span class="result-stock-bar"><i style="--v: 82%"></i></span>
+            <span class="result-stock-value">Élevé</span>
+          </div>
+          <span class="result-route" data-route-label="a">1,8 km · env. 9 min</span>
+          <button class="patient-choose-pharmacy" type="button" data-choose-pharmacy="a">Choisir cette pharmacie</button>
+        </article>
+
+        <article class="patient-result-card" data-pharmacy="b">
+          <div class="patient-result-head">
+            <div><strong>Pharmacie Fann Résidence</strong><small>Disponibilité simulée</small></div>
+            <span class="result-badge">OPTION</span>
+          </div>
+          <div class="result-stock">
+            <span class="result-stock-label">Stock</span>
+            <span class="result-stock-bar"><i style="--v: 46%"></i></span>
+            <span class="result-stock-value">Moyen</span>
+          </div>
+          <span class="result-route" data-route-label="b">2,6 km · env. 14 min</span>
+          <button class="patient-choose-pharmacy" type="button" data-choose-pharmacy="b">Choisir cette pharmacie</button>
+        </article>
+      </div>
+
+      <div class="patient-decision" id="patient-decision" role="status" aria-live="polite">
+        <span class="patient-decision-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg>
+        </span>
+        <div>
+          <strong id="patient-decision-title">Itinéraire direct disponible</strong>
+          <p id="patient-decision-copy">Aucun incident confirmé sur le trajet. Vous pouvez partir.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="patient-disclaimer">
+    <b>i</b><span>Simulation uniquement : pharmacies, stocks, routes et durées sont fictifs. Une rue signalée reste ouverte dans la démo jusqu'à confirmation par un agent.</span>
+  </p>
+</section>
+
+        <!-- 3. Les statuts -->
+        <section class="wf-section" aria-labelledby="wf-status-title">
+          <h2 class="wf-title" id="wf-status-title">Les statuts restent visibles</h2>
+          <p class="wf-sub">Exemple fictif : de l'alerte d'un usager à sa clôture.</p>
+          <div class="wf-statuses">
+            <article class="panel wf-status">
+              <div class="status-chip status-reported"><i></i>Signalé</div>
+              <strong>Un usager remonte une route inondée</strong>
+              <span class="wf-effect">Ne pas fermer automatiquement</span>
+            </article>
+            <span class="wf-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg></span>
+            <article class="panel wf-status">
+              <div class="status-chip status-confirmed"><i></i>Confirmé</div>
+              <strong>Un pharmacien ou modérateur vérifie</strong>
+              <span class="wf-effect">Éligible au recalcul</span>
+            </article>
+            <span class="wf-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 5 7 7-7 7"/></svg></span>
+            <article class="panel wf-status">
+              <div class="status-chip status-resolved"><i></i>Résolu</div>
+              <strong>Le passage est de nouveau praticable</strong>
+              <span class="wf-effect">Historique conservé</span>
+            </article>
+          </div>
+          <p class="wf-rule"><b>!</b><span><strong>Règle de prudence :</strong> sans détour fiable, afficher l'incertitude plutôt que garantir le trajet.</span></p>
+          <details class="wf-more">
+            <summary>Le rôle des usagers</summary>
+            <p>Les usagers peuvent confirmer un problème ou indiquer que le passage semble praticable. Leur avis oriente la vérification, mais seul l'agent modifie le statut.</p>
+          </details>
+        </section>
+
+        <!-- 4. Plan en diagramme -->
+        <section class="wf-section" aria-labelledby="wf-plan-title">
+          <h2 class="wf-title" id="wf-plan-title">Cinq semaines pour un POC démontrable</h2>
+          <p class="wf-sub">Petit périmètre, validation rapide.</p>
+          <div class="wf-timeline">
+            <article class="wf-week"><small>Semaine 1</small><h3>Valider les données</h3><span>Zone et sources vérifiées</span></article>
+            <article class="wf-week"><small>Semaine 2</small><h3>Créer le signalement</h3><span>Signalement stocké</span></article>
+            <article class="wf-week"><small>Semaine 3</small><h3>Partager et participer</h3><span>Parcours partagé</span></article>
+            <article class="wf-week"><small>Semaine 4</small><h3>Tester les détours</h3><span>Comportement vérifié</span></article>
+            <article class="wf-week"><small>Semaine 5</small><h3>Mesurer et présenter</h3><span>Résultats issus des tests</span></article>
+          </div>
+          <details class="wf-more">
+            <summary>Détail de chaque semaine</summary>
+            <ol>
+              <li><strong>Semaine 1.</strong> Tester le détail OSM dans la zone pilote, récupérer les cartes historiques, tester l'API météo.</li>
+              <li><strong>Semaine 2.</strong> Modèle d'incident, coordonnées, formulaire GPS, statut et règle initiale d'expiration.</li>
+              <li><strong>Semaine 3.</strong> Afficher les alertes, ajouter les avis des usagers, intégrer le calcul d'itinéraire.</li>
+              <li><strong>Semaine 4.</strong> Scénarios d'incidents périmés, faux signalements et absence de détour fiable.</li>
+              <li><strong>Semaine 5.</strong> Tester avec des utilisateurs, mesurer les résultats, préparer la démonstration.</li>
+            </ol>
+          </details>
+        </section>
+
+        <!-- 5. Stack en diagramme -->
+        <section class="wf-section" aria-labelledby="wf-stack-title">
+          <h2 class="wf-title" id="wf-stack-title">Une stack déjà adaptée</h2>
+          <p class="wf-sub">Quatre briques, chacune avec un rôle simple.</p>
+          <div class="wf-stack">
+            <article class="wf-tech"><span class="tech-badge flutter-badge">F</span><strong>Flutter</strong><span class="wf-tech-desc">Carte, recherche, signalement GPS</span><span class="tech-role">App</span></article>
+            <article class="wf-tech"><span class="tech-badge laravel-badge">L</span><strong>Laravel</strong><span class="wf-tech-desc">API, statuts, expiration, pharmacies</span><span class="tech-role">API</span></article>
+            <article class="wf-tech"><span class="tech-badge postgres-badge">P</span><strong>PostgreSQL · PostGIS</strong><span class="wf-tech-desc">Pharmacies, incidents, zones</span><span class="tech-role">Données</span></article>
+            <article class="wf-tech"><span class="tech-badge open-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></span><strong>OSM · météo · cartes</strong><span class="wf-tech-desc">Routes et contexte climatique</span><span class="tech-role">Sources</span></article>
+          </div>
+          <p class="wf-notes">OSRM seul n'exclut pas les tronçons de la table d'incidents : le routage doit être adapté. Attribution à respecter pour les sources ouvertes. Ne pas annoncer de kilomètres ou de temps économisés avant de les avoir mesurés. Incidents simulés autorisés pour la démo, à étiqueter clairement.</p>
+        </section>
+
+        <footer class="page-footer">
+          <span>© XamSaMed · Prototype Challenge SALTIS</span>
+          <span>Conçu pour une démonstration, pas pour guider un trajet réel.</span>
+        </footer>
+      </div>
+    </main>
+  </div>
+  <script src="workflow-demo.js" defer></script>
+</body>
+</html>

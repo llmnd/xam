@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f8fc">
+  <meta name="description" content="Présentation de l’étude et de la recommandation XamSaMed pour collecter les données de routes inondées à Dakar.">
+  <title>XamSaMed | Étude des données</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="theme.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="XamSaMed, application"><span class="brand-mark" aria-hidden="true"><span></span><span></span></span><span class="brand-name">XamSa<span>Med</span><small>LA SANTÉ, PLUS PROCHE</small></span></a>
+      <div class="workspace-label">ESPACE DÉMO <span class="live-dot"></span></div>
+      <nav class="side-nav" aria-label="Navigation principale">
+        <a class="nav-link" href="index.html"><span class="nav-icon icon-grid"></span>Application</a>
+        <a class="nav-link" href="sources.html"><span class="nav-icon icon-layers"></span>Sources de données</a>
+        <a class="nav-link" href="workflow.html"><span class="nav-icon icon-route"></span>Workflow POC</a>
+        <a class="nav-link active" href="presentation.html" aria-current="page"><span class="nav-icon icon-meeting"></span>Présentation</a>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-note"><span class="note-icon">i</span><div><strong>Étude & recommandation</strong><p>Sources de données et proposition de POC sur cinq semaines.</p></div></div>
+      <div class="profile"><div class="avatar">XM</div><div><strong>Équipe XamSaMed</strong><span>Challenge SALTIS · Dakar</span></div></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumb"><a href="index.html">POC</a><span class="crumb-sep">/</span><strong>Étude des données</strong></div>
+        <div class="topbar-actions"><span class="demo-pill"><span></span>SUPPORT</span><button class="button button-quiet presentation-toggle" type="button" data-presentation-enter>Mode présentation <span aria-hidden="true">▶</span></button><button class="button button-primary print-presentation" type="button" onclick="window.print()">Imprimer / PDF</button></div>
+      </header>
+
+      <div class="content meeting-content">
+        <section class="meeting-cover" aria-roledescription="diapositive" aria-label="Introduction">
+          <div class="meeting-cover-copy">
+            <p class="eyebrow"><span class="eyebrow-line"></span>CHALLENGE SALTIS · ÉTUDE DE DONNÉES</p>
+            <p class="meeting-overline">XAMSAMED · DAKAR</p>
+            <h1>Quand l’eau coupe la route,<br>comment garder le chemin<br>vers les soins ouvert ?</h1>
+            <p class="meeting-lead">Une étude concrète des données disponibles à Dakar, suivie d’une proposition de collecte collaborative réalisable en cinq semaines.</p>
+            <div class="meeting-meta"><span><i></i>Recommandation POC · cinq semaines</span><span>XamSaMed · Dakar</span></div>
+          </div>
+          <div class="cover-illustration" aria-hidden="true">
+            <div class="cover-orbit orbit-one"></div><div class="cover-orbit orbit-two"></div>
+            <div class="cover-center"><span class="cover-cross">+</span></div>
+            <span class="cover-pin pin-user">●</span><span class="cover-pin pin-alert">!</span><span class="cover-pin pin-pharmacy">+</span>
+            <span class="cover-route route-a"></span><span class="cover-route route-b"></span>
+            <span class="cover-water"></span><span class="cover-label label-dakar">DAKAR</span><span class="cover-label label-zone">ZONE PILOTE</span>
+          </div>
+        </section>
+
+        <section class="meeting-section" id="demande" aria-roledescription="diapositive" aria-label="Le besoin">
+          <div class="meeting-section-heading"><span class="meeting-number">01</span><div><p class="section-kicker">LE BESOIN</p><h2>Trois questions, trois types de données</h2></div></div>
+          <p class="visual-intro">Pour guider un patient, il faut connaître le réseau, comprendre le risque et vérifier la situation sur le terrain.</p>
+          <div class="data-type-diagram">
+            <article class="data-type-card">
+              <svg class="data-type-illustration map-illustration" viewBox="0 0 180 82" role="img" aria-label="Schéma de routes connectées">
+                <path d="M-5 20 185 62M-5 61 185 17M42-5 71 88M132-5 102 88M5 43 174 40" />
+                <path class="illustration-route" d="M18 65 54 48 86 53 119 28 162 35" />
+                <circle cx="18" cy="65" r="5" /><circle cx="162" cy="35" r="5" />
+              </svg>
+              <span class="data-type-step">01 · LE RÉSEAU</span><h3>Où sont les routes ?</h3><p>OpenStreetMap situe rues et intersections.</p><span class="data-type-answer">Une carte, pas l’état du trafic</span>
+            </article>
+            <span class="data-type-plus" aria-hidden="true">+</span>
+            <article class="data-type-card">
+              <svg class="data-type-illustration risk-illustration" viewBox="0 0 180 82" role="img" aria-label="Pluie et zone historique de risque">
+                <path class="risk-cloud" d="M52 37c-1-10 14-16 22-7 4-16 29-17 34-1 11-1 19 8 17 19H54c-5-3-5-7-2-11z" />
+                <path class="risk-drop" d="m68 53-4 10m22-10-4 10m22-10-4 10" />
+                <path class="risk-area" d="M24 70c19-13 32-10 44-1 11 8 23 7 32-1 11-10 26-10 41-1 7 4 12 5 21 3v12H24z" />
+              </svg>
+              <span class="data-type-step">02 · LE RISQUE</span><h3>Où redoubler d’attention ?</h3><p>Météo et cartes historiques donnent du contexte.</p><span class="data-type-answer">Un indicateur, pas une confirmation</span>
+            </article>
+            <span class="data-type-plus" aria-hidden="true">+</span>
+            <article class="data-type-card">
+              <svg class="data-type-illustration field-illustration" viewBox="0 0 180 82" role="img" aria-label="Signalement partagé puis vérifié">
+                <circle class="field-user" cx="38" cy="41" r="17" /><circle class="field-user-core" cx="38" cy="35" r="5" /><path class="field-user-body" d="M27 54c2-10 20-10 22 0" />
+                <path class="field-link" d="M59 41h34m14 0h24" /><path class="field-link-arrow" d="m89 36 5 5-5 5m34-10 5 5-5 5" />
+                <circle class="field-agent" cx="111" cy="41" r="13" /><path class="field-check" d="m105 41 4 4 8-9" />
+                <path class="field-db" d="M151 30c0-5 8-8 14-5s7 8 0 10c-6 3-14 0-14-5zm0 0v21c1 6 15 6 17 0V30m-17 10c2 6 15 5 17 0m-17 6c3 5 14 5 17 0" />
+              </svg>
+              <span class="data-type-step">03 · LE TERRAIN</span><h3>Que se passe-t-il maintenant ?</h3><p>Un usager signale, un agent vérifie.</p><span class="data-type-answer">L’observation la plus directe</span>
+            </article>
+          </div>
+          <div class="diagram-caption"><span>LA CLÉ DE L’ANALYSE</span><strong>Ne pas confondre une zone à risque avec une route confirmée impraticable.</strong></div>
+        </section>
+
+        <section class="meeting-section" id="sources" aria-roledescription="diapositive" aria-label="Les sources de données">
+          <div class="meeting-section-heading"><span class="meeting-number">02</span><div><p class="section-kicker">LES SOURCES</p><h2>Des données utiles, mais pas interchangeables</h2></div></div>
+          <p class="meeting-intro">Comparaison des pistes selon leur apport, leur accessibilité et leur pertinence pour Dakar.</p>
+          <div class="source-priority-visual" aria-label="Priorité des sources pour le POC">
+            <div class="priority-level priority-primary"><span class="priority-icon">O</span><div><small>SOCLE CARTOGRAPHIQUE</small><strong>OpenStreetMap</strong><span>Itinéraires de référence</span></div><b>À TESTER</b></div>
+            <span class="priority-join">+</span>
+            <div class="priority-level priority-report"><span class="priority-icon">⌖</span><div><small>OBSERVATION LOCALE</small><strong>Signalements terrain</strong><span>État actuel, si signalé</span></div><b>À CONSTRUIRE</b></div>
+            <span class="priority-join">+</span>
+            <div class="priority-level priority-context"><span class="priority-icon">☼</span><div><small>CONTEXTE DE RISQUE</small><strong>Météo + historique</strong><span>Vigilance complémentaire</span></div><b>EN APPUI</b></div>
+          </div>
+          <p class="priority-caption">Recommandation pour le POC · les partenaires externes restent facultatifs.</p>
+          <div class="source-slide-cards" aria-label="Synthèse des sources recommandées">
+            <article class="source-slide-card source-slide-osm">
+              <span class="source-slide-index">01 · CARTOGRAPHIE</span>
+              <h3>OpenStreetMap</h3>
+              <span class="source-slide-access">Ouvert · gratuit</span>
+              <p>Les rues servent de base pour situer les services et préparer un itinéraire.</p>
+              <strong>À vérifier : le niveau de détail dans la zone pilote.</strong>
+            </article>
+            <article class="source-slide-card source-slide-reports">
+              <span class="source-slide-index">02 · ÉTAT ACTUEL</span>
+              <h3>Signalements terrain</h3>
+              <span class="source-slide-access">À construire · local</span>
+              <p>Usagers et agents signalent les passages difficiles, avec lieu et heure.</p>
+              <strong>À prévoir : une vérification pour limiter les erreurs.</strong>
+            </article>
+            <article class="source-slide-card source-slide-context">
+              <span class="source-slide-index">03 · CONTEXTE</span>
+              <h3>Météo + historique</h3>
+              <span class="source-slide-access">Accès et licences à confirmer</span>
+              <p>La pluie et les zones exposées aident à orienter la vigilance.</p>
+              <strong>À retenir : elles ne confirment pas une rue inondée.</strong>
+            </article>
+          </div>
+          <div class="table-scroll meeting-table-scroll">
+            <table class="comparison-table meeting-table">
+              <thead><tr><th>SOURCE</th><th>APPORT AU POC</th><th>ACCÈS / COÛT</th><th>DAKAR & FRAÎCHEUR</th><th>LIMITE À EXPLIQUER</th><th>DÉCISION</th></tr></thead>
+              <tbody>
+                <tr><td><span class="table-source"><i class="table-dot dot-blue"></i>OSM + moteur de routage</span></td><td>Routes et intersections ; itinéraire de base.</td><td>Données OSM ouvertes, attribution à respecter ; vérifier le moteur choisi.</td><td>Dakar est cartographié ; détail local à contrôler. Contributions continues.</td><td>Une carte routière ne dit pas qu’une route est inondée aujourd’hui.</td><td><span class="table-priority essential">Base du POC</span></td></tr>
+                <tr><td><span class="table-source"><i class="table-dot dot-coral"></i>Signalements terrain</span></td><td>Observation concrète d’un usager, pharmacien ou agent.</td><td>À développer ; pas de licence de données, mais du travail produit et technique.</td><td>Directement pertinent pour Dakar si des personnes signalent sur place. À chaque saisie.</td><td>Couverture variable, doublons et erreurs possibles ; validation nécessaire.</td><td><span class="table-priority essential">Temps réel POC</span></td></tr>
+                <tr><td><span class="table-source"><i class="table-dot dot-yellow"></i>Open-Meteo</span></td><td>Pluie observée ou prévue selon les paramètres.</td><td>API accessible ; gratuité et conditions à vérifier pour notre usage.</td><td>Coordonnées de Dakar prises en charge selon le brief. Actualisation dépendante du modèle.</td><td>La pluie n’établit pas qu’une rue précise est impraticable.</td><td><span class="table-priority context">Indicateur</span></td></tr>
+                <tr><td><span class="table-source"><i class="table-dot dot-purple"></i>Cartes historiques</span></td><td>Repères sur les secteurs touchés auparavant ou estimés plus exposés.</td><td>Identifier le jeu exact et vérifier sa licence avant usage.</td><td>Couverture, période et précision à vérifier pour Dakar.</td><td>Une zone historique aide à prioriser la vigilance ; elle ne montre pas l’état actuel des routes.</td><td><span class="table-priority context">Contexte</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="meeting-callout meeting-callout-note"><span>i</span><p>Quel est l’intérêt d’une carte historique ? Repérer les secteurs qui méritent davantage de vigilance et orienter où collecter des signalements. Elle peut représenter l’emprise d’inondations passées ou une estimation du risque, selon le jeu choisi. Ce n’est pas une carte des routes bloquées aujourd’hui ; le jeu précis, sa couverture de Dakar et sa licence restent à identifier.</p></div>
+        </section>
+
+        <section class="meeting-section" id="collecte" aria-roledescription="diapositive" aria-label="La collecte collaborative">
+          <div class="meeting-section-heading"><span class="meeting-number">03</span><div><p class="section-kicker">COLLECTE COLLABORATIVE</p><h2>Qui met les informations dans la base ?</h2></div></div>
+          <p class="meeting-intro">La détection n’est pas automatique. L’information est signalée, vérifiée, puis partagée.</p>
+          <div class="collection-visual" aria-label="Diagramme du signalement jusqu'à la base de données">
+            <div class="visual-node visual-user"><span class="visual-node-icon">U</span><div><small>USAGER</small><strong>Observe et signale</strong><span>Lieu · type · heure</span></div></div>
+            <svg class="visual-connector" viewBox="0 0 90 28" aria-hidden="true"><path d="M4 14h75m-10-8 10 8-10 8" /></svg>
+            <div class="visual-node visual-agent"><span class="visual-node-icon">✓</span><div><small>AGENT TERRAIN</small><strong>Vérifie l’information</strong><span>Confirme ou résout</span></div></div>
+            <svg class="visual-connector" viewBox="0 0 90 28" aria-hidden="true"><path d="M4 14h75m-10-8 10 8-10 8" /></svg>
+            <div class="visual-node visual-database"><span class="visual-node-icon">DB</span><div><small>BASE PARTAGÉE</small><strong>Enregistre le statut</strong><span>API → PostgreSQL</span></div></div>
+          </div>
+          <div class="status-legend">
+            <span><i class="legend-reported"></i>À vérifier</span><b>→</b><span><i class="legend-confirmed"></i>Confirmé</span><b>→</b><span><i class="legend-resolved"></i>Résolu</span>
+            <small>Les votes orientent l’agent, mais ne remplacent pas sa vérification terrain.</small>
+          </div>
+          <div class="collection-flow">
+            <article class="collection-role"><span class="collection-icon role-citizen">U</span><span class="collection-step">RÔLE 1 · CONTRIBUTEUR</span><h3>Usager ou pharmacien</h3><p>Signale ce qu’il constate, puis les autres usagers peuvent confirmer ou indiquer que le passage est praticable.</p><span class="collection-output">Statut initial : <strong>À vérifier</strong></span></article>
+            <span class="collection-arrow">→</span>
+            <article class="collection-role"><span class="collection-icon role-agent">A</span><span class="collection-step">RÔLE 2 · VÉRIFICATION</span><h3>Agent terrain ou modérateur</h3><p>Recoupe l’information ou vérifie sur place, ajoute une note, puis confirme l’incident ou le marque comme résolu.</p><span class="collection-output">Statut mis à jour : <strong>Confirmé ou résolu</strong></span></article>
+            <span class="collection-arrow">→</span>
+            <article class="collection-role"><span class="collection-icon role-db">DB</span><span class="collection-step">RÔLE 3 · STOCKAGE PARTAGÉ</span><h3>API et base serveur</h3><p>L’API enregistre le signalement dans la base centrale et le rend visible aux autres utilisateurs autorisés.</p><span class="collection-output">Même information pour <strong>tous</strong></span></article>
+          </div>
+          <div class="data-pipeline">
+            <div><span>01</span><strong>Application mobile</strong><small>Formulaire + position si autorisée</small></div><b>→</b>
+            <div><span>02</span><strong>API sécurisée</strong><small>Validation + rôle + statut</small></div><b>→</b>
+            <div><span>03</span><strong>PostgreSQL / PostGIS</strong><small>Incidents + géométrie + historique</small></div><b>→</b>
+            <div><span>04</span><strong>Carte partagée</strong><small>Alertes et statut à jour</small></div>
+          </div>
+          <div class="meeting-callout"><span>!</span><p><strong>Prototype actuel :</strong> stockage local dans ce navigateur. Le partage réel nécessite une API, une base serveur et des rôles sécurisés.</p></div>
+        </section>
+
+        <section class="meeting-section" id="recommandation" aria-roledescription="diapositive" aria-label="La recommandation">
+          <div class="meeting-section-heading"><span class="meeting-number">04</span><div><p class="section-kicker">LA RECOMMANDATION</p><h2>Une solution simple, progressive et vérifiable</h2></div></div>
+          <div class="recommendation-card">
+            <div class="recommendation-top"><span class="recommend-icon">✦</span><div><span>COMBINAISON PROPOSÉE</span><h3>OSM + signalements vérifiables + contexte météo / historique</h3></div></div>
+            <div class="recommendation-columns">
+              <div><strong>1. OSM</strong><p>Un réseau routier ouvert pour situer les pharmacies et calculer un premier trajet. La qualité des rues sera vérifiée dans la zone choisie.</p></div>
+              <div><strong>2. Signalements terrain</strong><p>La source principale sur l’état réel des passages. Chaque observation porte un lieu, une heure et un statut de vérification.</p></div>
+              <div><strong>3. Météo et historique</strong><p>Un éclairage complémentaire sur le risque. Ces données ne suffisent jamais à déclarer une rue impraticable.</p></div>
+            </div>
+            <p class="recommendation-reason"><strong>Pourquoi cette combinaison ?</strong> Elle donne une base cartographique ouverte et une méthode concrète pour recueillir des observations locales, sans attendre l’accord d’un partenaire externe.</p>
+          </div>
+          <div class="meeting-two-col meeting-verdict">
+            <div><p class="content-label">POURQUOI CE CHOIX</p><p>En limitant le projet à une zone pilote, l’équipe peut tester la couverture cartographique, recueillir des observations et suivre leur validation avant d’élargir le périmètre.</p></div>
+            <div class="meeting-callout meeting-callout-blue"><span>✓</span><p><strong>Ce que le POC peut démontrer :</strong> la collecte, la vérification et l’affichage des alertes. Il ne prétendra pas détecter automatiquement toutes les rues inondées.</p></div>
+          </div>
+        </section>
+
+        <section class="meeting-section" id="plan" aria-roledescription="diapositive" aria-label="Le plan sur cinq semaines">
+          <div class="meeting-section-heading"><span class="meeting-number">05</span><div><p class="section-kicker">DU PLAN À LA DÉMO</p><h2>Cinq semaines pour passer de l’étude au test</h2></div></div>
+          <p class="plan-slide-lead">L’étude, la comparaison et le workflow sont posés. La suite : vérifier les sources dans une zone pilote et mettre en place le partage des signalements.</p>
+          <div class="meeting-two-col status-summary">
+            <article class="status-summary-card"><span class="summary-tag summary-done">TRAVAIL RÉALISÉ</span><ul><li>Première analyse des sources et des limites décrites dans le brief.</li><li>Comparaison des options et recommandation d’une combinaison pour le POC.</li><li>Définition du workflow collaboratif et d’un plan sur cinq semaines.</li><li>Création d’un prototype navigateur pour illustrer les rôles et les statuts.</li></ul></article>
+            <article class="status-summary-card summary-card-next"><span class="summary-tag summary-next">PROCHAINES VÉRIFICATIONS</span><ul><li>Tester le niveau de détail OSM dans le quartier retenu.</li><li>Télécharger les données historiques et vérifier formats et licences.</li><li>Essayer l’API météo et confirmer ses conditions d’utilisation.</li><li>Relier le formulaire à l’API et à la base partagée de l’équipe.</li><li>Tester la collecte GPS et les permissions côté serveur.</li></ul></article>
+          </div>
+          <div class="meeting-roadmap">
+            <div><span>S1</span><strong>Vérifier</strong><small>Routes et sources</small></div><i>→</i>
+            <div><span>S2</span><strong>Collecter</strong><small>Formulaire et données</small></div><i>→</i>
+            <div><span>S3</span><strong>Partager</strong><small>Base et statuts</small></div><i>→</i>
+            <div><span>S4</span><strong>Tester</strong><small>Vérification terrain</small></div><i>→</i>
+            <div><span>S5</span><strong>Démontrer</strong><small>Résultats mesurés</small></div>
+          </div>
+          <div class="meeting-final">
+            <p class="eyebrow"><span class="eyebrow-line"></span>CONCLUSION</p>
+            <h2>La prochaine étape : valider une zone pilote et partager les premières observations.</h2>
+            <p>L’étude propose une combinaison réaliste, et le prototype illustre le parcours de collecte. Il reste à vérifier les sources sur le terrain, puis à connecter les signalements à la base serveur pour que toute l’équipe puisse les consulter.</p>
+            <a class="button button-primary" href="index.html">Explorer le prototype interactif <span>→</span></a>
+          </div>
+        </section>
+        <footer class="page-footer"><span>XamSaMed · Étude des données · Challenge SALTIS</span><span><a class="text-link slide-guide-link" href="guide-explication-slides.md" target="_blank" rel="noopener">Ouvrir le guide simple des diapositives ↗</a></span></footer>
+      </div>
+      <nav class="slideshow-controls" aria-label="Commandes du diaporama" hidden>
+        <button class="slideshow-exit" type="button" data-presentation-exit aria-label="Quitter le mode présentation">Quitter <span aria-hidden="true">×</span></button>
+        <div class="slideshow-navigation">
+          <button type="button" data-presentation-previous aria-label="Diapositive précédente">←</button>
+          <span class="slideshow-counter" aria-live="polite">1 / 6</span>
+          <button type="button" data-presentation-next aria-label="Diapositive suivante">→</button>
+        </div>
+        <span class="slideshow-hint">Flèches du clavier pour naviguer · Échap pour quitter</span>
+      </nav>
+    </main>
+  </div>
+  <script src="presentation.js" defer></script>
+</body>
+</html>

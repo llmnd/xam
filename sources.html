@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f8fc">
+  <meta name="description" content="Comparaison des sources de données pour détecter les routes inondées ou impraticables à Dakar.">
+  <title>XamSaMed — Sources de données</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-upgrade.css">
+  <style>
+    /* Page Sources — mise en page minimaliste (s'appuie sur style-upgrade.css) */
+    .sx-content { max-width: 1040px; }
+    .sx-intro { margin-bottom: 8px; }
+    .sx-intro .lead { max-width: 640px; }
+    .sx-caution { margin: 6px 0 0; color: #536b7c; font-size: 15px; line-height: 1.6; max-width: 640px; }
+    .sx-section { margin-top: 56px; }
+    .sx-title { margin: 0 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+    .sx-sub { margin: 0 0 24px; color: #536b7c; font-size: 15px; line-height: 1.6; }
+
+    .sx-essentials { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+    .sx-card { padding: 30px; }
+    .sx-card h2 { margin: 22px 0 6px; font-size: 26px; line-height: 1.2; }
+    .sx-purpose { margin: 0 0 22px; color: #456d87; font-size: 16px; font-weight: 600; }
+    .sx-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0 0 20px; padding: 0; list-style: none; }
+    .sx-facts li { display: grid; gap: 4px; color: var(--ink); font-size: 15px; font-weight: 700; line-height: 1.4; }
+    .sx-facts span { color: #607789; font-size: 12px; font-weight: 700; letter-spacing: .8px; }
+
+    .sx-more summary { width: fit-content; cursor: pointer; color: var(--accent); font-size: 14px; font-weight: 700; }
+    .sx-more[open] summary { margin-bottom: 12px; }
+    .sx-more p { margin: 0 0 10px; color: #536b7c; font-size: 14px; line-height: 1.65; }
+    .sx-more p:last-child { margin-bottom: 0; }
+    .sx-more strong { color: var(--ink); }
+
+    .sx-minis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+    .sx-mini { padding: 18px 20px; border-radius: 16px; background: var(--soft); transition: background .25s; }
+    .sx-mini summary { display: flex; align-items: center; gap: 14px; cursor: pointer; list-style: none; }
+    .sx-mini summary::-webkit-details-marker { display: none; }
+    .sx-mini-text { flex: 1; min-width: 0; display: grid; gap: 3px; }
+    .sx-mini-text strong { color: var(--ink-strong); font-size: 16px; }
+    .sx-mini-text span { color: #536b7c; font-size: 14px; }
+    .sx-mini[open] { background: #edf3f9; }
+    .sx-mini .sx-more-body { padding-top: 14px; }
+    .sx-mini .sx-more-body p { margin: 0 0 8px; color: #536b7c; font-size: 14px; line-height: 1.65; }
+    .sx-mini .sx-more-body p:last-child { margin-bottom: 0; }
+
+    .sx-panel { padding: 8px 28px 20px; }
+    .sx-row { display: grid; grid-template-columns: minmax(170px, 1.2fr) repeat(3, minmax(0, 1fr)); align-items: center; gap: 28px; padding: 18px 0; box-shadow: 0 -1px 0 var(--hair); }
+    .sx-row:first-child { box-shadow: none; }
+    .sx-head { padding: 16px 0 8px; color: #607789; font-size: 12px; font-weight: 800; letter-spacing: 1px; }
+    .sx-name { display: grid; gap: 7px; justify-items: start; color: var(--ink-strong); font-size: 16px; font-weight: 700; }
+    .sx-name .table-priority { font-size: 11px; }
+    .sx-lab { display: none; margin-bottom: 7px; color: #607789; font-size: 12px; font-weight: 700; }
+    .sx-bar { display: flex; gap: 4px; }
+    .sx-bar i { flex: 1; height: 7px; border-radius: 999px; background: #e1eaf2; }
+    .sx-bar i.on { background: linear-gradient(90deg, #5aa0d6, #2a73bd); }
+    .sx-legend { margin: 8px 0 0; color: #536b7c; font-size: 13px; line-height: 1.6; }
+    .sx-notes { margin: 20px 0 0; color: #607789; font-size: 12px; line-height: 1.7; }
+
+    .sx-video-card { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); overflow: hidden; border: 1px solid #dce8f2; border-radius: 20px; background: linear-gradient(135deg, #f4f9ff, #fff 58%); box-shadow: 0 18px 42px -32px #1b4f8c80; }
+    .sx-video-copy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 34px; }
+    .sx-video-kicker { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; color: #2876c7; font-size: 11px; font-weight: 800; letter-spacing: .9px; text-transform: uppercase; }
+    .sx-video-kicker::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #35ad91; box-shadow: 0 0 0 4px #35ad9120; }
+    .sx-video-copy h3 { margin: 0 0 12px; color: var(--ink-strong, #1e3449); font-size: 25px; line-height: 1.2; letter-spacing: -.03em; }
+    .sx-video-copy p { margin: 0; color: #536b7c; font-size: 15px; line-height: 1.7; }
+    .sx-video-note { margin-top: 20px !important; padding-left: 13px; border-left: 2px solid #8dbde3; font-size: 13px !important; }
+    .sx-video-frame { min-width: 0; padding: 14px; }
+    .sx-video-frame video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; background: #10273e; object-fit: contain; }
+
+    body.theme-dark .sx-caution, body.theme-dark .sx-sub, body.theme-dark .sx-more p,
+    body.theme-dark .sx-mini-text span, body.theme-dark .sx-mini .sx-more-body p,
+    body.theme-dark .sx-legend { color: #b2c4d3; }
+    body.theme-dark .sx-purpose { color: #9fc9e3; }
+    body.theme-dark .sx-facts span, body.theme-dark .sx-head, body.theme-dark .sx-lab,
+    body.theme-dark .sx-notes { color: #9bb0c1; }
+    body.theme-dark .sx-mini { background: #1b2e43; }
+    body.theme-dark .sx-mini[open] { background: #213850; }
+    body.theme-dark .sx-bar i { background: #2f4a60; }
+    body.theme-dark .sx-bar i.on { background: linear-gradient(90deg, #5aa0d6, #78b7ee); }
+    body.theme-dark .sx-video-card { border-color: #2f4a60; background: linear-gradient(135deg, #1b2e43, #17283b 58%); }
+    body.theme-dark .sx-video-copy h3 { color: #e5eef5; }
+    body.theme-dark .sx-video-copy p { color: #b2c4d3; }
+
+    @media (max-width: 850px) {
+      .sx-essentials, .sx-minis { grid-template-columns: minmax(0, 1fr); }
+      .sx-video-card { grid-template-columns: minmax(0, 1fr); }
+      .sx-section { margin-top: 44px; }
+    }
+    @media (max-width: 700px) {
+      .sx-head { display: none; }
+      .sx-row { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 20px 0; }
+      .sx-lab { display: block; }
+      .sx-card { padding: 22px; }
+      .sx-panel { padding: 4px 20px 16px; }
+    }
+  </style>
+  <script src="theme.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="XamSaMed, accueil"><span class="brand-mark" aria-hidden="true"><span></span><span></span></span><span class="brand-name">XamSa<span>Med</span><small>LA SANTÉ, PLUS PROCHE</small></span></a>
+      <nav class="side-nav" aria-label="Navigation principale">
+        <a class="nav-link" href="index.html"><span class="nav-icon icon-grid"></span>Application</a>
+        <a class="nav-link active" href="sources.html" aria-current="page"><span class="nav-icon icon-layers"></span>Sources de données</a>
+        <a class="nav-link" href="workflow.html"><span class="nav-icon icon-route"></span>Workflow POC</a>
+        <a class="nav-link" href="presentation.html"><span class="nav-icon icon-meeting"></span>Présentation</a>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="profile"><div class="avatar">XM</div><div><strong>Équipe XamSaMed</strong><span>Challenge SALTIS · Dakar</span></div><span class="profile-menu">···</span></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumb"><a href="index.html">POC</a><span class="crumb-sep">/</span><strong>Sources de données</strong></div>
+        <div class="topbar-actions"><div class="top-avatar">XM</div></div>
+      </header>
+
+      <div class="content sx-content">
+        <!-- 1. L'essentiel -->
+        <section class="welcome-row page-intro sx-intro">
+          <div>
+            <h1>Data</h1>
+        </section>
+
+        <!-- 2. Les deux sources indispensables -->
+        <section class="sx-section" aria-labelledby="sx-essential-title">
+          <h2 class="sx-title" id="sx-essential-title">À combiner pour le POC</h2>
+          <p class="sx-sub">Les deux sources sans lesquelles la démo ne fonctionne pas.</p>
+          <div class="sx-essentials">
+            <article class="source-card sx-card">
+              <div class="source-card-head"><span class="source-logo osm-logo">O</span><span class="priority-badge badge-essential">INDISPENSABLE</span></div>
+              <h2>OpenStreetMap</h2>
+              <p class="sx-purpose">Le réseau routier de référence</p>
+              <ul class="sx-facts"><li><span>COÛT</span>Gratuit · ouvert</li><li><span>TEMPS RÉEL</span>Non</li></ul>
+              <details class="sx-more"><summary>Limites et intégration</summary>
+                <p>Ne dit rien sur les inondations. Attribution ODbL requise, routage à adapter pour éviter les tronçons confirmés.</p>
+                <p><strong>Dans XamSaMed :</strong> importer le réseau routier et calculer un trajet avec OSRM.</p>
+              </details>
+            </article>
+            <article class="source-card sx-card">
+              <div class="source-card-head"><span class="source-logo report-logo">⌖</span><span class="priority-badge badge-live">PRIORITÉ TERRAIN</span></div>
+              <h2>Signalements</h2>
+              <p class="sx-purpose">La meilleure indication de l’état réel</p>
+              <ul class="sx-facts"><li><span>COÛT</span>Pas de licence</li><li><span>TEMPS RÉEL</span>Oui, si signalé</li></ul>
+              <details class="sx-more"><summary>Limites et intégration</summary>
+                <p>Peu de données au départ, risque de doublons ou de fausses alertes : modérer et faire expirer les alertes.</p>
+                <p><strong>Dans XamSaMed :</strong> formulaire GPS, stockage PostGIS, statuts signalé, confirmé, résolu.</p>
+              </details>
+            </article>
+          </div>
+        </section>
+
+        <!-- 3. Le reste, replié -->
+        <section class="sx-section" aria-labelledby="sx-more-title">
+          <h2 class="sx-title" id="sx-more-title">Pour compléter</h2>
+          <p class="sx-sub">Du contexte utile, jamais une preuve.</p>
+          <div class="sx-minis">
+            <details class="sx-mini">
+              <summary><span class="source-logo climate-logo">☼</span><span class="sx-mini-text"><strong>Open-Meteo</strong><span>Prévisions de pluie</span></span><span class="priority-badge badge-context">COMPLÉMENT</span></summary>
+              <div class="sx-more-body"><p>API gratuite sous conditions¹. La pluie signale une vigilance, pas une rue inondée.</p><p><strong>Dans XamSaMed :</strong> appel via le backend Laravel, affiché comme vigilance, jamais comme alerte confirmée.</p></div>
+            </details>
+            <details class="sx-mini">
+              <summary><span class="source-logo history-logo">◷</span><span class="sx-mini-text"><strong>Cartes historiques</strong><span>Risque ou inondations observées auparavant</span></span><span class="priority-badge badge-context">COMPLÉMENT</span></summary>
+              <div class="sx-more-body">
+                <p><strong>En clair :</strong> selon le jeu choisi, la carte peut montrer l’emprise d’une inondation passée ou des zones estimées plus exposées. Oui, c’est une zone sur une carte, pas l’état actuel de chaque rue.</p>
+                <p><strong>Son intérêt pour XamSaMed :</strong> repérer les secteurs à surveiller en priorité, guider la collecte terrain et donner du contexte quand une alerte arrive. Elle ne prouve ni qu’une route est inondée aujourd’hui ni qu’une route hors de la zone est forcément praticable.</p>
+                <p><strong>WB:</strong> En utilisant les jeux de données précis de la Banque mondiale, ces cartes nous aident à cibler les zones à surveiller en priorité, à trier les signalements et à justifier nos choix : les Flood Extent Maps 2009-2018 (ESA EO4SD-Urban) nous montrent les emprises d'inondations passées à Dakar, les Flood Hazard Maps (ESA EO4SD-Urban) classifient les zones en trois niveaux d'aléa selon la fréquence des événements, et ThinkHazard! (GFDRR) nous donne une note de risque urbain à l'échelle de la commune, sans jamais remplacer un signalement terrain vérifié.</p>
+                <p><strong>Dans XamSaMed :</strong> afficher la zone comme indicateur de vigilance en arrière-plan. Seul un signalement récent vérifié peut justifier le statut « route bloquée ».</p>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- 4. Vidéo de cartographie des zones inondables -->
+        <section class="sx-section" aria-labelledby="sx-video-title">
+          <h2 class="sx-title" id="sx-video-title">La cartographie des zones inondables</h2>
+          <p class="sx-sub">Du radar et des images satellite pour mieux comprendre les zones exposées.</p>
+          <div class="sx-video-card">
+            <div class="sx-video-copy">
+              <span class="sx-video-kicker">À découvrir · PGISS Sénégal</span>
+              <h3>Voir le territoire autrement</h3>
+              <p>Cette vidéo présente comment le PGISS mobilise les données radar et satellite pour cartographier les zones inondables et mieux visualiser les secteurs exposés.</p>
+              <p class="sx-video-note">Ces cartes apportent un contexte précieux, mais ne remplacent pas un signalement récent vérifié pour connaître l’état d’une route.</p>
+            </div>
+            <div class="sx-video-frame">
+              <video controls preload="metadata" playsinline aria-label="Vidéo du PGISS Sénégal sur la cartographie des zones inondables par radar et satellite">
+                <source src="pgiss.sec.gov.sn.mp4" type="video/mp4">
+                Votre navigateur ne prend pas en charge la lecture de cette vidéo.
+              </video>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Comparaison visuelle en bas -->
+        <section class="sx-section" aria-labelledby="sx-compare-title">
+          <h2 class="sx-title" id="sx-compare-title">Comparer d’un coup d’œil</h2>
+          <p class="sx-sub">Plus la barre est remplie, mieux c’est pour le POC.</p>
+          <div class="panel sx-panel">
+            <div class="sx-row sx-head" aria-hidden="true"><span>SOURCE</span><span>TEMPS RÉEL</span><span>FIABILITÉ</span><span>FACILITÉ</span></div>
+
+            <div class="sx-row">
+              <div class="sx-name"><span class="table-source"><i class="table-dot dot-blue"></i>OpenStreetMap</span><span class="table-priority essential">Indispensable</span></div>
+              <div><span class="sx-lab">Temps réel</span><span class="sx-bar" role="img" aria-label="Temps réel : 0 sur 4"><i></i><i></i><i></i><i></i></span></div>
+              <div><span class="sx-lab">Fiabilité</span><span class="sx-bar" role="img" aria-label="Fiabilité : 3 sur 4"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div>
+              <div><span class="sx-lab">Facilité</span><span class="sx-bar" role="img" aria-label="Facilité : 4 sur 4"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+            </div>
+
+            <div class="sx-row">
+              <div class="sx-name"><span class="table-source"><i class="table-dot dot-coral"></i>Signalements</span><span class="table-priority essential">Indispensable</span></div>
+              <div><span class="sx-lab">Temps réel</span><span class="sx-bar" role="img" aria-label="Temps réel : 4 sur 4"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+              <div><span class="sx-lab">Fiabilité</span><span class="sx-bar" role="img" aria-label="Fiabilité : 2 sur 4"><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+              <div><span class="sx-lab">Facilité</span><span class="sx-bar" role="img" aria-label="Facilité : 2 sur 4"><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+            </div>
+
+            <div class="sx-row">
+              <div class="sx-name"><span class="table-source"><i class="table-dot dot-yellow"></i>Open-Meteo</span><span class="table-priority context">Complément</span></div>
+              <div><span class="sx-lab">Temps réel</span><span class="sx-bar" role="img" aria-label="Temps réel : 2 sur 4"><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+              <div><span class="sx-lab">Fiabilité</span><span class="sx-bar" role="img" aria-label="Fiabilité : 2 sur 4"><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+              <div><span class="sx-lab">Facilité</span><span class="sx-bar" role="img" aria-label="Facilité : 4 sur 4"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+            </div>
+
+            <div class="sx-row">
+              <div class="sx-name"><span class="table-source"><i class="table-dot dot-purple"></i>Cartes historiques</span><span class="table-priority context">Complément</span></div>
+              <div><span class="sx-lab">Temps réel</span><span class="sx-bar" role="img" aria-label="Temps réel : 0 sur 4"><i></i><i></i><i></i><i></i></span></div>
+              <div><span class="sx-lab">Fiabilité</span><span class="sx-bar" role="img" aria-label="Fiabilité : 3 sur 4"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div>
+              <div><span class="sx-lab">Facilité</span><span class="sx-bar" role="img" aria-label="Facilité : 2 sur 4"><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+            </div>
+
+          </div>
+          <p class="sx-legend">Appréciation pratique pour le POC, pas une mesure officielle.</p>
+          <p class="sx-notes">¹ Conditions d’usage à vérifier. * Couverture et accès à confirmer avant intégration. Attribution : ODbL pour OpenStreetMap. La licence des cartes historiques dépend du jeu de données précis ; vérifier sa fiche avant réutilisation.</p>
+        </section>
+
+        <footer class="page-footer"><span>© XamSaMed · Prototype Challenge SALTIS</span><span>Disponibilités et conditions des fournisseurs à valider.</span></footer>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f8fc">
+  <meta name="description" content="Démo interactive XamSaMed : signaler, collecter et valider les informations de routes à Dakar.">
+  <title>XamSaMed — Application démo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style-upgrade.css">
+  <script src="theme.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body class="interactive-app">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="XamSaMed, application">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span></span>
+        <span class="brand-name">XamSa<span>Med</span><small>LA SANTÉ, PLUS PROCHE</small></span>
+      </a>
+      <div class="workspace-label">ESPACE DÉMO <span class="live-dot"></span></div>
+      <nav class="side-nav" aria-label="Navigation principale">
+        <a class="nav-link active" href="index.html" aria-current="page"><span class="nav-icon icon-grid"></span>Application</a>
+        <a class="nav-link" href="sources.html"><span class="nav-icon icon-layers"></span>Sources de données</a>
+        <a class="nav-link" href="workflow.html"><span class="nav-icon icon-route"></span>Workflow POC</a>
+        <a class="nav-link" href="presentation.html"><span class="nav-icon icon-meeting"></span>Présentation</a>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-note">
+        <span class="note-icon">i</span>
+        <div><strong>Démo locale</strong><p>Les signalements sont enregistrés uniquement dans ce navigateur. Ce n’est pas un vrai compte.</p></div>
+      </div>
+      <div class="profile" id="sidebar-profile"></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumb"><span>ESPACE DÉMO</span><span class="crumb-sep">/</span><strong id="page-breadcrumb">Application</strong></div>
+        <div class="topbar-actions">
+          <span class="demo-pill"><span></span>LOCAL</span>
+          <button class="switch-role-button" id="switch-role" type="button">Changer de rôle</button>
+          <div class="top-avatar" id="top-avatar">XM</div>
+        </div>
+      </header>
+      <div class="content" id="application-content" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <dialog class="login-screen" id="login-screen" aria-labelledby="login-title">
+    <section class="login-card">
+      <a class="brand login-brand" href="index.html" aria-label="XamSaMed">
+        <span class="brand-name">XamSa<span>Med</span><small>LA SANTÉ, PLUS PROCHE</small></span>
+      </a>
+      <p class="eyebrow"><span class="eyebrow-line"></span>PROTOTYPE INTERACTIF</p>
+      <h1 id="login-title">Bienvenue dans<br>XamSaMed.</h1>
+      <p class="login-description">Choisissez un profil de démonstration pour essayer le parcours adapté à son rôle.</p>
+      <form id="login-form">
+        <label class="field-label" for="login-name">Votre nom</label>
+        <input class="form-control" id="login-name" name="name" maxlength="40" autocomplete="name" placeholder="Ex. Awa Diop" required>
+        <fieldset class="role-picker">
+          <legend class="field-label">Je me connecte en tant que</legend>
+          <label class="role-option selected" data-role-option="citizen">
+            <input type="radio" name="role" value="citizen" checked>
+            <span class="role-option-icon citizen-avatar">U</span>
+            <span><strong>Usager</strong><small>Je signale une route difficile</small></span>
+            <span class="role-radio"></span>
+          </label>
+          <label class="role-option" data-role-option="agent">
+            <input type="radio" name="role" value="agent">
+            <span class="role-option-icon agent-avatar">A</span>
+            <span><strong>Agent terrain</strong><small>Je collecte et vérifie les alertes</small></span>
+            <span class="role-radio"></span>
+          </label>
+        </fieldset>
+        <button class="button button-primary login-submit" type="submit">Entrer dans la démo <span>→</span></button>
+        <p class="login-disclaimer"><span>i</span>Connexion fictive : aucun mot de passe, compte ou serveur n’est utilisé.</p>
+        <p class="login-error" id="login-error" role="alert" hidden></p>
+      </form>
+    </section>
+  </dialog>
+
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
