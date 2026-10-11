@@ -267,7 +267,7 @@
   function renderSidebar() {
     var profile = document.getElementById("sidebar-profile");
     var avatarText = initials(selectedUser.name);
-    profile.innerHTML = '<div class="avatar">' + escapeHtml(avatarText) + '</div><div><strong>' + escapeHtml(selectedUser.name) + '</strong><span>' + roleName(selectedUser.role) + ' · démo locale</span></div><button class="profile-menu profile-logout" type="button" id="logout-button" aria-label="Se déconnecter" title="Se déconnecter">↗</button>';
+    profile.innerHTML = '<div class="avatar">' + escapeHtml(avatarText) + '</div><div><strong>' + escapeHtml(selectedUser.name) + '</strong><span>' + roleName(selectedUser.role) + ' · démo locale</span></div><button class="profile-menu profile-logout" type="button" id="logout-button" aria-label="Se déconnecter" title="Se déconnecter"><svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg></button>';
     document.getElementById("top-avatar").textContent = avatarText;
     document.getElementById("page-breadcrumb").textContent = selectedUser.role === "agent" ? "Espace agent terrain" : "Espace usager";
   }
@@ -315,15 +315,15 @@
   }
 
   function renderDemoNotice() {
-    return '<section class="notice-banner app-notice"><span class="notice-symbol">✳</span><p><strong>Données de démonstration enregistrées sur cet appareil</strong><span>Les premières alertes sont fictives. Les nouveaux signalements restent dans ce navigateur et ne sont pas transmis à une équipe réelle.</span></p><a href="workflow.html">Voir le workflow <span>→</span></a></section>';
+    return '<section class="notice-banner app-notice"><span class="notice-symbol">✳</span><p><strong>Données de démonstration enregistrées sur cet appareil</strong><span>Les premières alertes sont fictives. Les nouveaux signalements restent dans ce navigateur et ne sont pas transmis à une équipe réelle.</span></p><a href="workflow.html">Voir le workflow <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a></section>';
   }
 
   function renderMetrics(counts) {
     return '<section class="metric-grid app-metrics" aria-label="Résumé des signalements">' +
       '<article class="metric-card"><div class="metric-top"><span class="metric-icon icon-coral">⌁</span><span class="metric-tag tag-coral">À TRAITER</span></div><div class="metric-value">' + counts.reported + '</div><div class="metric-label">Signalements à vérifier</div><div class="metric-foot">Observations pas encore confirmées</div></article>' +
       '<article class="metric-card"><div class="metric-top"><span class="metric-icon icon-blue">✓</span><span class="metric-tag tag-neutral">TERRAIN</span></div><div class="metric-value">' + counts.confirmed + '</div><div class="metric-label">Routes confirmées impraticables</div><div class="metric-foot">À garder en compte pour les trajets</div></article>' +
-      '<article class="metric-card"><div class="metric-top"><span class="metric-icon icon-green">↗</span><span class="metric-tag tag-green">SUIVI</span></div><div class="metric-value">' + counts.resolved + '</div><div class="metric-label">Incidents résolus</div><div class="metric-foot">Historique conservé localement</div></article>' +
-      '<article class="metric-card metric-card-accent"><div class="metric-top"><span class="metric-icon icon-white">⌖</span><span class="metric-tag tag-white">ZONE PILOTE</span></div><div class="metric-value">' + counts.active + '</div><div class="metric-label">Alertes encore actives</div><a class="metric-link" href="#reports">Consulter les signalements <span>→</span></a></article></section>';
+      '<article class="metric-card"><div class="metric-top"><span class="metric-icon icon-green"><svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span><span class="metric-tag tag-green">SUIVI</span></div><div class="metric-value">' + counts.resolved + '</div><div class="metric-label">Incidents résolus</div><div class="metric-foot">Historique conservé localement</div></article>' +
+      '<article class="metric-card metric-card-accent"><div class="metric-top"><span class="metric-icon icon-white">⌖</span><span class="metric-tag tag-white">ZONE PILOTE</span></div><div class="metric-value">' + counts.active + '</div><div class="metric-label">Alertes encore actives</div><a class="metric-link" href="#reports">Consulter les signalements <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a></section>';
   }
 
   function renderTips(isAgent) {
@@ -334,7 +334,7 @@
       : '<li><span>1</span><div><strong>Choisir le lieu</strong><small>Indiquez le quartier et un repère facile à trouver.</small></div></li><li><span>2</span><div><strong>Décrire ce que vous voyez</strong><small>Un fait constaté, sans supposer l’état des rues voisines.</small></div></li><li><span>3</span><div><strong>Laisser l’agent vérifier</strong><small>Votre alerte reste « à vérifier » tant qu’elle n’est pas confirmée.</small></div></li>';
     return '<article class="panel tips-panel"><div class="panel-heading"><div><p class="section-kicker">' + kicker +
       '</p><h2>' + title + '</h2></div><span class="tips-icon">✦</span></div><ul class="tips-list">' + tips +
-      '</ul><div class="tips-source"><span>i</span>Les prévisions météo et cartes historiques donnent du contexte ; elles ne confirment pas l’état actuel d’une route.</div><a class="text-link" href="sources.html">Comprendre les sources <span>→</span></a></article>';
+      '</ul><div class="tips-source"><span>i</span>Les prévisions météo et cartes historiques donnent du contexte ; elles ne confirment pas l’état actuel d’une route.</div><a class="text-link" href="sources.html">Comprendre les sources <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></a></article>';
   }
 
   function renderReports(isAgent, reports, shownReports, counts) {
@@ -367,7 +367,7 @@
       '<label class="form-field"><span>Quartier et repère</span><input class="form-control" name="location" maxlength="90" placeholder="Ex. Médina, près du marché" required></label></div>' +
       '<label class="form-field"><span>Ce que vous observez</span><textarea class="form-control" name="description" rows="3" maxlength="280" placeholder="Décrivez brièvement le passage ou le problème…" required></textarea><small class="field-hint">Décrivez uniquement ce que vous avez constaté.</small></label>' +
       '<div class="gps-row"><button class="gps-button" type="button" data-action="locate">⌖ <span>Ajouter ma position GPS</span></button><span class="gps-status" id="gps-status">Facultatif · autorisation demandée seulement sur action</span></div>' +
-      '<div class="form-feedback" id="form-feedback" role="alert" hidden></div><button class="button button-primary form-submit" type="submit">Envoyer le signalement <span>→</span></button></form>' +
+      '<div class="form-feedback" id="form-feedback" role="alert" hidden></div><button class="button button-primary form-submit" type="submit">Envoyer le signalement <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button></form>' +
       '<div class="form-footnote"><span>i</span>Votre alerte apparaîtra comme « à vérifier » jusqu’à validation par un agent.</div></article>';
   }
 
@@ -377,7 +377,7 @@
       '<label class="form-field"><span>Quartier et repère</span><input class="form-control" name="location" maxlength="90" placeholder="Ex. Fann, près du poste de santé" required></label></div>' +
       '<label class="form-field"><span>Note de terrain</span><textarea class="form-control" name="description" rows="3" maxlength="280" placeholder="Précisez ce que vous avez vérifié sur place…" required></textarea><small class="field-hint">Cette collecte sera enregistrée comme observation confirmée par l’agent.</small></label>' +
       '<div class="gps-row"><button class="gps-button" type="button" data-action="locate">⌖ <span>Ajouter ma position GPS</span></button><span class="gps-status" id="gps-status">Facultatif · autorisation demandée seulement sur action</span></div>' +
-      '<div class="form-feedback" id="form-feedback" role="alert" hidden></div><button class="button button-primary form-submit" type="submit">Enregistrer la collecte terrain <span>→</span></button></form>' +
+      '<div class="form-feedback" id="form-feedback" role="alert" hidden></div><button class="button button-primary form-submit" type="submit">Enregistrer la collecte terrain <svg class="app-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></button></form>' +
       '<div class="form-footnote agent-footnote"><span>✓</span>Votre observation sera immédiatement enregistrée comme confirmée.</div></article>';
   }
 
