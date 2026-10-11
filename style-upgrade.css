@@ -8,7 +8,6 @@
 .interactive-app .reports-heading .panel-subtitle,
 .interactive-app .report-description,
 .interactive-app .app-welcome .lead,
-.interactive-app .app-welcome .eyebrow,
 .interactive-app .panel-heading .section-kicker,
 .interactive-app .form-step,
 .interactive-app .app-metrics .metric-tag,
@@ -18,23 +17,118 @@
 .interactive-app .workspace-label,
 .interactive-app .demo-pill { display: none; }
 
-/* ---- 2. Le plus important en haut : titre, puis 3 chiffres clés ---- */
+/* ---- 2. Accueil éditorial et indicateurs ---- */
 .interactive-app .content { max-width: 1040px; }
-.interactive-app .app-welcome { margin-bottom: 28px; }
-.interactive-app .app-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 36px; }
-.interactive-app .app-metrics .metric-card:nth-child(3) { display: none; }
-.interactive-app .app-metrics .metric-card { min-height: 0; padding: 22px 24px; }
-.interactive-app .app-metrics .metric-top { margin-bottom: 14px; }
-.interactive-app .app-metrics .metric-value { font-size: 42px; }
-.interactive-app .app-metrics .metric-label { margin-top: 10px; }
+.interactive-app .app-welcome {
+  position: relative;
+  isolation: isolate;
+  min-height: 190px;
+  margin-bottom: 22px;
+  padding: 30px 34px;
+  overflow: hidden;
+  border: 1px solid #234d7d;
+  border-radius: 15px;
+  background: linear-gradient(125deg, #102b50 0%, #164b83 70%, #17649b 100%);
+  box-shadow: 0 18px 36px -24px #17345a99;
+}
+.interactive-app .app-welcome::before {
+  position: absolute;
+  z-index: -1;
+  top: -110px;
+  right: 7%;
+  width: 330px;
+  height: 330px;
+  border: 1px solid #d7e9ff30;
+  border-radius: 50%;
+  box-shadow: 0 0 0 30px #d7e9ff0d, 0 0 0 60px #d7e9ff09;
+  content: "";
+  pointer-events: none;
+}
+.interactive-app .app-welcome::after {
+  position: absolute;
+  top: 15%;
+  right: 34px;
+  width: 1px;
+  height: 70%;
+  background: linear-gradient(transparent, #d7e9ff40, transparent);
+  content: "";
+  pointer-events: none;
+}
+.interactive-app .app-welcome > div,
+.interactive-app .app-welcome > .role-indicator { z-index: 1; }
+.interactive-app .app-welcome .eyebrow {
+  margin-bottom: 14px;
+  color: #b8d5f4;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+.interactive-app .app-welcome .eyebrow-line { background: #83baff; }
+body.interactive-app:not(.theme-dark) .app-welcome h1 {
+  margin: 0;
+  color: #f5f8ff;
+  font-size: clamp(26px, 3vw, 35px);
+  font-weight: 600;
+  letter-spacing: -1.3px;
+  line-height: 1.2;
+}
+.interactive-app .role-indicator {
+  padding: 8px 12px;
+  border: 1px solid #d7e9ff32;
+  border-radius: 2px;
+  color: #e5f0ff;
+  background: #ffffff14;
+  font-size: 10px;
+}
+.interactive-app .citizen-role,
+.interactive-app .agent-role { color: #e5f0ff; background: #ffffff14; }
+.interactive-app .app-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.interactive-app .app-metrics .metric-card {
+  min-height: 112px;
+  padding: 17px 19px;
+  border-radius: 13px;
+}
+.interactive-app .app-metrics .metric-top { margin-bottom: 9px; }
+.interactive-app .app-metrics .metric-value { font-size: 32px; }
+.interactive-app .app-metrics .metric-label { margin-top: 7px; font-size: 12px; }
 
 /* ---- 3. Une seule action : le formulaire, pleine largeur ---- */
-.interactive-app .app-work-grid { grid-template-columns: minmax(0, 1fr); margin-bottom: 36px; }
-.interactive-app .form-panel { padding: 32px; }
+.interactive-app .app-work-grid { grid-template-columns: minmax(0, 1fr); margin-bottom: 28px; }
+.interactive-app .form-panel { padding: 26px; }
+.interactive-app .form-panel .panel-heading h2 { font-size: 20px; }
+.interactive-app .form-field { font-size: 12px; }
+.interactive-app .form-control { border-radius: 8px; font-size: 14px; }
+.interactive-app .form-field textarea.form-control { min-height: 100px; }
+.interactive-app .gps-button { font-size: 12px; }
+.interactive-app .form-submit { min-height: 44px; font-size: 12px; }
 
 /* ---- 4. Liste des signalements : épurée ---- */
-.interactive-app .reports-panel { margin-bottom: 36px; }
-.interactive-app .report-card { padding: 18px 20px; }
+.interactive-app .reports-panel { margin-bottom: 28px; padding: 22px; }
+.interactive-app .reports-heading { align-items: center; }
+.interactive-app .reports-heading h2 { font-size: 20px; }
+.interactive-app .report-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.interactive-app .report-card {
+  min-width: 0;
+  padding: 14px;
+  gap: 11px;
+  border-radius: 12px;
+}
+.interactive-app .report-card-icon { width: 34px; height: 34px; }
+.interactive-app .report-title-row { align-items: flex-start; }
+.interactive-app .report-title-row h3 { font-size: 12px; }
+.interactive-app .status-pill { font-size: 9px; }
+.interactive-app .report-location { font-size: 11px; }
+.interactive-app .report-meta { font-size: 9px; }
+body.interactive-app:not(.theme-dark) .report-card {
+  border-color: #e3eaf4;
+  box-shadow: 0 8px 24px -19px #1b3c6880, 0 2px 5px #17345a06;
+}
 
 /* ---- 5. Diagrammes en bas ---- */
 .xm-insights { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 24px; }
@@ -63,14 +157,38 @@
 .xm-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #5aa0d6, #2a73bd); transition: width .6s ease; }
 
 @media (max-width: 850px) {
-  .interactive-app .app-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-  .interactive-app .app-metrics .metric-value { font-size: 30px; }
+  .interactive-app .app-welcome { min-height: 170px; padding: 26px 28px; }
+  .interactive-app .app-metrics { gap: 11px; }
+  .interactive-app .app-metrics .metric-value { font-size: 29px; }
+  .interactive-app .reports-panel { padding: 18px; }
   .xm-insights { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 600px) {
-  .interactive-app .form-panel { padding: 20px; }
-  .interactive-app .app-metrics .metric-card { padding: 14px; }
-  .interactive-app .app-metrics .metric-label { font-size: 12px; }
+  .interactive-app .app-welcome {
+    min-height: 0;
+    margin-bottom: 17px;
+    padding: 23px 20px;
+    border-radius: 13px;
+  }
+  .interactive-app .app-welcome::before { top: -115px; right: -150px; }
+  .interactive-app .app-welcome::after { right: 19px; }
+  .interactive-app .app-welcome .eyebrow { margin-bottom: 11px; font-size: 8px; }
+  .interactive-app .app-welcome h1 { font-size: clamp(24px, 7vw, 31px); }
+  .interactive-app .role-indicator { align-self: flex-start; padding: 6px 9px; font-size: 9px; }
+  .interactive-app .app-metrics { gap: 9px; margin-bottom: 20px; }
+  .interactive-app .app-metrics .metric-card { min-height: 100px; padding: 13px; }
+  .interactive-app .app-metrics .metric-value { font-size: 26px; }
+  .interactive-app .app-metrics .metric-label { font-size: 11px; line-height: 1.4; }
+  .interactive-app .form-panel { padding: 18px; }
+  .interactive-app .form-panel .panel-heading h2,
+  .interactive-app .reports-heading h2 { font-size: 18px; }
+  .interactive-app .form-field { font-size: 11px; }
+  .interactive-app .form-control { font-size: 13px; }
+  .interactive-app .reports-panel { margin-bottom: 20px; padding: 16px; }
+  .interactive-app .reports-heading { align-items: flex-start; }
+  .interactive-app .report-list { grid-template-columns: minmax(0, 1fr); gap: 9px; }
+  .interactive-app .report-card { padding: 13px; }
+  .interactive-app .report-title-row { flex-wrap: wrap; }
   .xm-card { padding: 20px; }
 }
 /* XamSaMed — démo du parcours patient (à charger après style-upgrade.css) */
