@@ -785,6 +785,39 @@ body.presentation-mode .meeting-final .button-primary { display: none; }
   .meeting-roadmap>i { transform: rotate(90deg); }
   .meeting-final { padding: 18px; }
 }
+@media (max-width: 600px) {
+  body.presentation-mode .main-area {
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+  body.presentation-mode .meeting-content {
+    height: 100vh;
+    height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+  body.presentation-mode .meeting-content > section.is-active {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: visible;
+    padding: max(32px, env(safe-area-inset-top)) 18px
+      calc(104px + env(safe-area-inset-bottom));
+  }
+  .slideshow-controls:not([hidden]) {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+  .slideshow-exit,
+  .slideshow-navigation button {
+    min-height: 44px;
+  }
+  .slideshow-navigation button { width: 44px; }
+}
 @media print {
   .presentation-toggle,.slideshow-controls { display: none !important; }
   .meeting-content { max-width: none; padding: 8px; }

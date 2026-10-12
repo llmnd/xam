@@ -2,6 +2,7 @@
   const slides = Array.from(document.querySelectorAll(
     ".meeting-content > .meeting-cover, .meeting-content > .meeting-section"
   ));
+  const meetingContent = document.querySelector(".meeting-content");
   const controls = document.querySelector(".slideshow-controls");
   const counter = document.querySelector(".slideshow-counter");
   const previousButton = document.querySelector("[data-presentation-previous]");
@@ -19,6 +20,7 @@
 
   function showSlide(index) {
     currentSlide = Math.max(0, Math.min(index, slides.length - 1));
+    meetingContent.scrollTop = 0;
 
     slides.forEach((slide, slideIndex) => {
       const isCurrent = slideIndex === currentSlide;
