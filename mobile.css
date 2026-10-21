@@ -481,20 +481,23 @@ body.theme-dark.mobile-demo .detail-hero{background:#16201c}
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   11. MENU DU BAS VERROUILLÉ — il ne bouge plus jamais
+   11. MENU DU BAS VERROUILLÉ (iPhone Safari inclus)
+   Le body est collé aux 4 bords de la fenêtre visible : toute la chaîne
+   de hauteurs en dépend, donc l'écran remplit exactement l'espace utile
+   et le menu reste vissé en bas, sans bande vide.
    ═══════════════════════════════════════════════════════════════════ */
 @media (max-width:650px){
-  /* La page elle-même ne défile plus : seul le contenu de l'écran défile */
-  html,body.mobile-demo{height:100%;overflow:hidden;overscroll-behavior:none}
-  .mobile-demo .app-shell,
+  html{height:100%;overflow:hidden;background:var(--paper-warm,#f5f7f5)}
+  body.mobile-demo{position:fixed;inset:0;width:100%;height:auto;margin:0;overflow:hidden;overscroll-behavior:none}
+  .mobile-demo .app-shell{display:block;height:100%;min-height:0}
   .mobile-demo .main-area,
   .mobile-demo .content.mobile-content,
-  .mobile-demo .mobile-stage{height:100dvh;min-height:0;overflow:hidden}
-  .phone-device,.phone-frame{height:100%}
-  /* L'écran est ancré aux 4 bords de la fenêtre ; le menu reste collé en bas */
-  .phone-screen{position:fixed;inset:0;height:auto}
+  .mobile-demo .mobile-stage,
+  .phone-device,
+  .phone-frame,
+  .phone-screen{position:relative;inset:auto;height:100%;min-height:0;overflow:hidden}
   .phone-tabs{margin:0 14px calc(10px + env(safe-area-inset-bottom,0px))}
   .phone-view{overscroll-behavior:contain}
-  /* Clavier ouvert (recherche) : le menu s'efface au lieu de remonter et de masquer le contenu */
+  /* Clavier ouvert (recherche) : le menu s'efface au lieu de masquer le contenu */
   .phone-screen:has(input:focus) .phone-tabs{display:none}
 }
