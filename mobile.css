@@ -479,3 +479,22 @@ body.theme-dark.mobile-demo .detail-hero{background:#16201c}
 @media (prefers-reduced-motion:reduce){
   .duty-card,.phone-brand-mark,.phone-icon-button::after,.pharmacy-mini-card{animation:none!important}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   11. MENU DU BAS VERROUILLÉ — il ne bouge plus jamais
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width:650px){
+  /* La page elle-même ne défile plus : seul le contenu de l'écran défile */
+  html,body.mobile-demo{height:100%;overflow:hidden;overscroll-behavior:none}
+  .mobile-demo .app-shell,
+  .mobile-demo .main-area,
+  .mobile-demo .content.mobile-content,
+  .mobile-demo .mobile-stage{height:100dvh;min-height:0;overflow:hidden}
+  .phone-device,.phone-frame{height:100%}
+  /* L'écran est ancré aux 4 bords de la fenêtre ; le menu reste collé en bas */
+  .phone-screen{position:fixed;inset:0;height:auto}
+  .phone-tabs{margin:0 14px calc(10px + env(safe-area-inset-bottom,0px))}
+  .phone-view{overscroll-behavior:contain}
+  /* Clavier ouvert (recherche) : le menu s'efface au lieu de remonter et de masquer le contenu */
+  .phone-screen:has(input:focus) .phone-tabs{display:none}
+}
