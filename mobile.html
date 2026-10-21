@@ -42,12 +42,11 @@
       </header>
       <div class="content mobile-content">
         <section class="mobile-intro">
-          <p class="eyebrow"><span class="eyebrow-line"></span>APERÇU DU PRODUIT · DAKAR</p>
-          <h1>La santé, plus proche.</h1>
-          <p class="mobile-lead">Une nouvelle expérience mobile pour trouver un médicament, une pharmacie et un chemin vers les soins.</p>
-          <div class="mobile-intro-meta"><span class="mobile-status-dot"></span>Prototype interactif <span class="mobile-meta-divider">·</span> Toutes les données sont fictives</div>
+          <p class="eyebrow"><span class="eyebrow-line"></span>XAMSAMED · DAKAR</p>
+          <h1>Les pharmacies<br>près de vous.</h1>
+          <p class="mobile-lead">Repérez un point de santé, vérifiez les informations utiles et explorez le parcours mobile.</p>
           <div class="mobile-screen-picker">
-            <p class="screen-picker-label">EXPLORER LES ÉCRANS</p>
+            <p class="screen-picker-label">PARCOURIR LA MAQUETTE</p>
             <div class="screen-picker-buttons" role="group" aria-label="Accès rapides aux écrans">
               <button type="button" data-preview="home" class="is-selected">Accueil</button>
               <button type="button" data-preview="map">Carte</button>
@@ -56,10 +55,25 @@
               <button type="button" data-preview="alerts">Hôpital</button>
             </div>
           </div>
-          <div class="mobile-journey-note">
-            <span class="journey-icon" aria-hidden="true">↗</span>
-            <p><strong>Un parcours, de la recherche à la réservation.</strong><span>Essaie la recherche ou touche une pharmacie dans l’écran.</span></p>
-          </div>
+          <section class="pharmacy-showcase" aria-labelledby="showcase-title">
+            <div class="showcase-heading">
+              <div><p>À DÉCOUVRIR</p><h2 id="showcase-title">Pharmacies en vedette</h2></div>
+              <button type="button" data-preview="pharmacies">Tout voir <span aria-hidden="true">→</span></button>
+            </div>
+            <div class="showcase-list">
+              <button class="showcase-card" type="button" data-preview="pharmacies">
+                <span class="showcase-image"><img src="assets/pharmacy-showcase-1.jpg" alt="" loading="lazy"><span class="showcase-photo-caption">APERÇU</span></span>
+                <span class="showcase-copy"><strong>Pharmacie du Plateau</strong><span>Plateau · Dakar</span><span class="showcase-meta"><i></i> Exemple de disponibilité</span></span>
+                <span class="showcase-arrow" aria-hidden="true">›</span>
+              </button>
+              <button class="showcase-card" type="button" data-preview="pharmacies">
+                <span class="showcase-image"><img src="assets/pharmacy-showcase-2.jpg" alt="" loading="lazy"><span class="showcase-photo-caption">APERÇU</span></span>
+                <span class="showcase-copy"><strong>Pharmacie de la Médina</strong><span>Médina · Dakar</span><span class="showcase-meta"><i></i> Horaires de démonstration</span></span>
+                <span class="showcase-arrow" aria-hidden="true">›</span>
+              </button>
+            </div>
+            <p class="showcase-disclaimer">Visuels d’inspiration · noms et informations fictifs</p>
+          </section>
         </section>
 
         <section class="mobile-stage" aria-label="Aperçu de l’application mobile">
@@ -76,7 +90,7 @@
                   </span>
                 </div>
                 <div class="phone-appbar">
-                  <a class="phone-brand" href="#" data-route="home" aria-label="Accueil XamSaMed"><span class="phone-brand-mark">+</span><span>XamSa<b>Med</b></span></a>
+                  <a class="phone-brand" href="#" data-route="home" aria-label="Accueil XamSaMed"><span class="phone-brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z"/></svg></span><span>XamSa<b>Med</b></span></a>
                   <button class="phone-icon-button" type="button" data-route="profile" aria-label="Ouvrir le profil"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.4-3.8 2.8-5.8 7-5.8s6.6 2 7 5.8"/></svg></button>
                 </div>
                 <div id="phone-view" class="phone-view" aria-live="polite"></div>

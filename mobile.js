@@ -20,9 +20,9 @@
   };
 
   const medicines = [
-    { id: "doliprane", name: "Paracétamol 500 mg", detail: "Boîte de 16 comprimés", symbol: "✳", status: "Disponible", className: "", pharmacies: 4 },
-    { id: "vitamine", name: "Vitamine C 1000 mg", detail: "Comprimés effervescents", symbol: "◉", status: "À vérifier", className: "unavailable", pharmacies: 2 },
-    { id: "serum", name: "Sérum physiologique", detail: "Unidose · 5 ml", symbol: "＋", status: "Disponible", className: "", pharmacies: 3 }
+    { id: "doliprane", name: "Paracétamol 500 mg", detail: "Boîte de 16 comprimés", icon: "capsule", status: "Disponible", className: "", pharmacies: 4 },
+    { id: "vitamine", name: "Vitamine C 1000 mg", detail: "Comprimés effervescents", icon: "vitamin", status: "À vérifier", className: "unavailable", pharmacies: 2 },
+    { id: "serum", name: "Sérum physiologique", detail: "Unidose · 5 ml", icon: "serum", status: "Disponible", className: "", pharmacies: 3 }
   ];
   const pharmacies = [
     { id: "plateau", name: "Pharmacie du Plateau", distance: "0,8 km", area: "Plateau · Avenue L. S. Senghor", open: true, rating: "4,8", reviews: "42 avis" },
@@ -43,11 +43,28 @@
     alerts: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 12h4"/>',
     back: '<path d="m15 18-6-6 6-6M9 12h12"/>',
     search: '<circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/>',
-    pin: '<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>'
+    pin: '<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',
+    capsule: '<path d="M5.5 18.5a5 5 0 0 1 0-7.1l5.9-5.9a5 5 0 0 1 7.1 7.1l-5.9 5.9a5 5 0 0 1-7.1 0Z"/><path d="m8 14 4 4"/>',
+    vitamin: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v10m-5-5h10"/>',
+    serum: '<path d="M9 3h6m-5 0v4l-3 3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-9l-3-3V3"/><path d="M8 11h8m-6 4h4"/>',
+    medicine: '<path d="M5.5 18.5a5 5 0 0 1 0-7.1l5.9-5.9a5 5 0 0 1 7.1 7.1l-5.9 5.9a5 5 0 0 1-7.1 0Z"/><path d="m8 14 4 4"/>',
+    crosshair: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/>',
+    heart: '<path d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.7 4.7 0 0 1 12 6.5a4.7 4.7 0 0 1 8.8 2.3Z"/>',
+    star: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>',
+    warning: '<path d="M10.3 4.3 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"/><path d="M12 9v5m0 3h.01"/>',
+    brandCross: '<path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7z"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/>',
+    arrowRight: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
+    chevron: '<path d="m9 18 6-6-6-6"/>'
   };
 
   function icon(name) {
     return '<svg viewBox="0 0 24 24" aria-hidden="true">' + (icons[name] || "") + "</svg>";
+  }
+
+  function starRating(rating) {
+    return '<span class="rating-stars" aria-label="Note ' + rating + ' sur 5">' +
+      Array.from({ length: 5 }, () => icon("star")).join("") + "</span>";
   }
 
   function escapeHtml(value) {
@@ -103,16 +120,16 @@
 
   function medicineCard(item) {
     return '<button class="med-row" type="button" data-medicine="' + item.id + '">' +
-      '<span class="med-symbol' + (item.id === "vitamine" ? " green" : "") + '">' + item.symbol + "</span>" +
+      '<span class="med-symbol' + (item.id === "vitamine" ? " green" : "") + '">' + icon(item.icon) + "</span>" +
       '<span class="med-row-copy"><strong>' + item.name + "</strong><span>" + item.detail + "</span></span>" +
       '<span class="stock-status ' + item.className + '">' + item.status + "</span></button>";
   }
 
   function pharmacyCard(item) {
     return '<button type="button" class="pharmacy-card" data-pharmacy="' + item.id + '">' +
-      '<span class="pharmacy-icon">✚</span><span class="pharmacy-copy"><strong>' + item.name +
+      '<span class="pharmacy-icon">' + icon("pharmacy") + '</span><span class="pharmacy-copy"><strong>' + item.name +
       '</strong><span>' + item.area + '</span><span class="' + (item.open ? "open-status" : "closed-status") + '">' +
-      (item.open ? "Ouverte maintenant" : "Fermée") + " · ★ " + item.rating + " · " + item.reviews +
+      (item.open ? "Ouverte maintenant" : "Fermée") + " · " + starRating(item.rating) + " " + item.rating + " · " + item.reviews +
       '</span></span><span class="pharmacy-distance">' + item.distance + "</span></button>";
   }
 
@@ -122,14 +139,17 @@
       '<form class="app-search" id="medicine-search">' + icon("search") +
       '<input name="query" aria-label="Rechercher un médicament" placeholder="Quel médicament recherchez-vous ?" value="' + escapeHtml(state.query) + '">' +
       '<button type="submit" aria-label="Rechercher">' + icon("search") + "</button></form>" +
-      '<article class="home-feature"><p class="home-feature-label">VOTRE SANTÉ, À PORTÉE DE MAIN</p><h3>Trouvez votre médicament près de vous.</h3>' +
-      "<p>Explorez les pharmacies et leurs disponibilités autour de Dakar.</p>" +
-      '<button type="button" data-route="map">Voir les pharmacies près de moi&nbsp; →</button></article>' +
+      '<article class="home-feature"><div class="home-feature-images" aria-hidden="true">' +
+      '<img class="is-active" src="assets/pharmacy-showcase-1.jpg" alt="">' +
+      '<img src="assets/pharmacy-showcase-2.jpg" alt=""></div>' +
+      '<p class="home-feature-label">XAMSAMED · PHARMACIES À DAKAR</p><h3>La bonne pharmacie,<br>tout près de vous.</h3>' +
+      "<p>Explorez les pharmacies et leurs disponibilités autour de vous.</p>" +
+      '<button type="button" data-route="pharmacies">Explorer les pharmacies' + icon("arrowRight") + "</button></article>" +
       '<div class="app-section-head"><h3>Explorer</h3></div><div class="category-row">' +
-      '<button type="button" class="category-button" data-route="results"><span class="category-icon">✳</span>Médicaments</button>' +
-      '<button type="button" class="category-button" data-tab="pharmacies"><span class="category-icon">✚</span>Pharmacies</button>' +
-      '<button type="button" class="category-button" data-tab="map"><span class="category-icon">⌖</span>À proximité</button>' +
-      '<button type="button" class="category-button" data-tab="profile"><span class="category-icon">♡</span>Favoris</button></div>' +
+      '<button type="button" class="category-button" data-route="results"><span class="category-icon">' + icon("medicine") + '</span>Médicaments</button>' +
+      '<button type="button" class="category-button" data-tab="pharmacies"><span class="category-icon">' + icon("pharmacy") + '</span>Pharmacies</button>' +
+      '<button type="button" class="category-button" data-tab="map"><span class="category-icon">' + icon("crosshair") + '</span>À proximité</button>' +
+      '<button type="button" class="category-button" data-tab="profile"><span class="category-icon">' + icon("heart") + '</span>Favoris</button></div>' +
       '<div class="app-section-head"><h3>Recherches populaires</h3><button class="app-text-button" type="button" data-route="results">Tout voir</button></div>' +
       '<div class="med-list">' + medicines.slice(0, 2).map(medicineCard).join("") + "</div>" +
       '<p class="update-caption" data-updated>Démo · actualisée à l’instant</p></section>';
@@ -138,7 +158,7 @@
   function pageResults() {
     const query = state.query.trim().toLocaleLowerCase("fr");
     const results = medicines.filter((item) => !query || (item.name + " " + item.detail).toLocaleLowerCase("fr").includes(query));
-    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>← Retour</button>' +
+    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>' + icon("back") + "Retour</button>" +
       '<p class="app-kicker" style="margin-top:16px">RECHERCHE</p><h2 class="app-title">Médicaments</h2>' +
       '<form class="app-search" id="medicine-search">' + icon("search") +
       '<input name="query" aria-label="Rechercher un médicament" placeholder="Nom du médicament" value="' + escapeHtml(state.query) + '">' +
@@ -151,8 +171,8 @@
 
   function pageMedicine() {
     const item = medicineById(state.selectedMedicine);
-    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>← Retour aux résultats</button>' +
-      '<div class="detail-hero"><span class="med-symbol green">' + item.symbol + '</span><div><p class="app-kicker">MÉDICAMENT · DÉMO</p><strong>' + item.name + "</strong><p>" + item.detail + "</p></div></div>" +
+    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>' + icon("back") + "Retour aux résultats</button>" +
+      '<div class="detail-hero"><span class="med-symbol green">' + icon(item.icon) + '</span><div><p class="app-kicker">MÉDICAMENT · DÉMO</p><strong>' + item.name + "</strong><p>" + item.detail + "</p></div></div>" +
       '<div class="detail-info"><div><span>Disponibilité exemple</span><strong>' + item.status + '</strong></div><div><span>Pharmacies listées</span><strong>' + item.pharmacies + " (fictives)</strong></div></div>" +
       '<div class="app-section-head"><h3>Pharmacies à proximité</h3><button type="button" class="app-text-button" data-tab="pharmacies">Tout voir</button></div>' +
       '<div class="pharmacy-list">' + pharmacies.slice(0, 2).map(pharmacyCard).join("") + "</div>" +
@@ -187,19 +207,19 @@
       '<div class="map-illustration" role="img" aria-label="Carte illustrative de Dakar avec trois pharmacies fictives">' +
       '<span class="map-road one"></span><span class="map-road two"></span><span class="map-road three"></span><span class="map-river"></span>' +
       '<span class="map-label l1">PLATEAU</span><span class="map-label l2">MÉDINA</span><span class="map-label l3">FANN</span>' +
-      '<span class="map-pin p1"><span>+</span></span><span class="map-pin p2"><span>+</span></span><span class="map-pin p3"><span>+</span></span></div>' +
-      '<p class="map-note"><span>ⓘ</span> Carte schématique · géolocalisation non activée</p>' +
+      '<span class="map-pin p1"><span>' + icon("pharmacy") + '</span></span><span class="map-pin p2"><span>' + icon("pharmacy") + '</span></span><span class="map-pin p3"><span>' + icon("pharmacy") + '</span></span></div>' +
+      '<p class="map-note">' + icon("info") + " Carte schématique · géolocalisation non activée</p>" +
       '<div class="app-section-head"><h3>Pharmacies proches</h3><button type="button" class="app-text-button" data-tab="pharmacies">Liste</button></div>' +
       '<div class="pharmacy-list">' + pharmacies.slice(0, 2).map(pharmacyCard).join("") + "</div></section>";
   }
 
   function pagePharmacy() {
     const item = pharmacyById(state.selectedPharmacy);
-    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>← Retour aux pharmacies</button>' +
-      '<div class="detail-hero"><span class="pharmacy-icon">✚</span><div><p class="app-kicker">PHARMACIE · DÉMO</p><strong>' + item.name +
+    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>' + icon("back") + "Retour aux pharmacies</button>" +
+      '<div class="detail-hero"><span class="pharmacy-icon">' + icon("pharmacy") + '</span><div><p class="app-kicker">PHARMACIE · DÉMO</p><strong>' + item.name +
       "</strong><p>" + item.area + "</p></div></div>" +
       '<div class="detail-info"><div><span>Horaires (fictifs)</span><strong>' + (item.open ? "Ouverte · ferme à 20 h" : "Fermée · ouvre à 8 h") +
-      '</strong></div><div><span>Avis de démonstration</span><strong>★ ' + item.rating + " · " + item.reviews + "</strong></div></div>" +
+      '</strong></div><div><span>Avis de démonstration</span><strong class="detail-rating">' + starRating(item.rating) + " " + item.rating + " · " + item.reviews + "</strong></div></div>" +
       '<div class="app-section-head"><h3>Disponibilités exemple</h3><span class="app-demo-label">SIMULÉ</span></div>' +
       '<div class="med-list">' + medicines.slice(0, 2).map(medicineCard).join("") + "</div>" +
       '<button type="button" class="primary-action" data-action="call">Appeler la pharmacie</button>' +
@@ -211,16 +231,16 @@
     return '<section class="app-screen"><p class="app-kicker">VOTRE ESPACE</p><h2 class="app-title">Mon profil</h2>' +
       '<div class="profile-card"><span class="profile-avatar">AD</span><div><strong>Awa Diop</strong><p>Compte de démonstration · Dakar</p></div></div>' +
       '<div class="app-section-head"><h3>Mon activité</h3></div><div class="settings-list">' +
-      '<button type="button" class="settings-row" data-route="bookings"><span>Mes réservations · ' + state.bookings + '</span><span>›</span></button>' +
-      '<button type="button" class="settings-row" data-action="favorites"><span>Mes pharmacies favorites</span><span>›</span></button>' +
-      '<button type="button" class="settings-row" data-action="edit-profile"><span>Informations personnelles</span><span>›</span></button></div>' +
+      '<button type="button" class="settings-row" data-route="bookings"><span>Mes réservations · ' + state.bookings + '</span>' + icon("chevron") + "</button>" +
+      '<button type="button" class="settings-row" data-action="favorites"><span>Mes pharmacies favorites</span>' + icon("chevron") + "</button>" +
+      '<button type="button" class="settings-row" data-action="edit-profile"><span>Informations personnelles</span>' + icon("chevron") + "</button></div>" +
       '<div class="app-section-head"><h3>Mode de démonstration</h3></div>' +
       '<button type="button" class="secondary-action" data-action="switch-role">' + (state.role === "hospital" ? "Passer en mode usager" : "Découvrir l’espace hôpital") + "</button>" +
       '<p class="update-caption">Profil fictif · aucune donnée personnelle stockée.</p></section>';
   }
 
   function pageBookings() {
-    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>← Retour au profil</button>' +
+    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>' + icon("back") + "Retour au profil</button>" +
       '<p class="app-kicker" style="margin-top:16px">VOTRE ESPACE</p><h2 class="app-title">Mes réservations</h2>' +
       (state.bookings ? '<div class="app-demo-label" style="margin-top:10px">RÉSERVATION FICTIVE</div>' +
         Array.from({ length: state.bookings }, () => '<article class="booking-card"><div><strong>' + medicineById(state.selectedMedicine).name + '</strong><span class="booking-pill">À confirmer</span></div>' +
@@ -243,18 +263,18 @@
 
   function pageAlertDetail(id) {
     const item = alerts.find((alert) => alert.id === id) || alerts[0];
-    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>← Retour aux alertes</button>' +
-      '<div class="detail-hero"><span class="med-symbol">' + (item.type === "Rupture" ? "!" : "↗") + '</span><div><p class="app-kicker">ALERTE · EXEMPLE</p><strong>' + item.name + '</strong><p>' + item.type + " de stock · donnée simulée</p></div></div>" +
+    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>' + icon("back") + "Retour aux alertes</button>" +
+      '<div class="detail-hero"><span class="med-symbol alert-symbol">' + icon("warning") + '</span><div><p class="app-kicker">ALERTE · EXEMPLE</p><strong>' + item.name + '</strong><p>' + item.type + " de stock · donnée simulée</p></div></div>" +
       '<div class="detail-info"><div><span>Zone signalée</span><strong>' + item.area + '</strong></div><div><span>Signalement exemple</span><strong>' + item.time + "</strong></div></div>" +
       '<p class="inline-empty" style="margin-top:14px">Cette alerte illustre une sous-page réservée au rôle hospitalier. Elle ne provient pas d’un établissement réel.</p>' +
       '<button type="button" class="secondary-action" data-back>Retour à la liste</button></section>';
   }
 
   function pageReviews() {
-    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>← Retour à la pharmacie</button>' +
+    return '<section class="app-screen"><button type="button" class="app-text-button" data-back>' + icon("back") + "Retour à la pharmacie</button>" +
       '<p class="app-kicker" style="margin-top:16px">AVIS · EXEMPLES</p><h2 class="app-title">Avis patients</h2>' +
       '<p class="app-subtitle">Pharmacie du Plateau · notes et commentaires fictifs.</p>' +
-      '<article class="booking-card"><div><strong>★★★★☆ · 4,8</strong><span class="booking-pill">Démo</span></div><p>« Accueil agréable et informations claires. »<br>Exemple d’avis · il y a 2 semaines</p></article>' +
+      '<article class="booking-card"><div><strong class="review-rating">' + starRating("4,8") + ' <span>4,8</span></strong><span class="booking-pill">Démo</span></div><p>« Accueil agréable et informations claires. »<br>Exemple d’avis · il y a 2 semaines</p></article>' +
       '<button type="button" class="primary-action" data-action="review">Donner mon avis</button><p class="update-caption">Les avis ne sont pas publiés.</p></section>';
   }
 
