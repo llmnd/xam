@@ -891,6 +891,32 @@ body.theme-dark.mobile-demo .showcase-copy .showcase-meta { color: #a5b5c0; }
   .phone-tab span { font-size: 9px; }
 }
 
+/* ——— Aperçu seul, adapté à chaque format d'écran ——— */
+@media (min-width: 651px) {
+  .mobile-demo { overflow: hidden; }
+  .mobile-demo .sidebar,
+  .mobile-demo .topbar,
+  .mobile-demo .mobile-intro,
+  .mobile-demo .stage-caption,
+  .mobile-demo .stage-disclaimer { display: none; }
+  .mobile-demo .main-area { height: 100vh; height: 100dvh; min-height: 0; margin-left: 0; }
+  .mobile-demo .content.mobile-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    padding: 0;
+    place-items: center;
+    overflow: hidden;
+  }
+  .mobile-demo .mobile-stage { display: grid; width: 100%; min-width: 0; place-items: center; }
+  .phone-device { width: min(390px, calc(100vw - 32px)); }
+  .phone-screen { height: min(760px, calc(100dvh - 32px)); min-height: 0; }
+}
+
 /* ——— Mode mobile : l'app prend toute la largeur, sans faux cadre de téléphone ——— */
 @media (max-width: 650px) {
   .mobile-demo .sidebar,
