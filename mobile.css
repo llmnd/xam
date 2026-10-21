@@ -893,29 +893,41 @@ body.theme-dark.mobile-demo .showcase-copy .showcase-meta { color: #a5b5c0; }
 
 /* ——— Mode mobile : l'app prend toute la largeur, sans faux cadre de téléphone ——— */
 @media (max-width: 650px) {
-  .mobile-demo .main-area, .mobile-demo .content.mobile-content { overflow-x: clip; }
-  .mobile-intro, .mobile-stage { min-width: 0; width: 100%; }
+  .mobile-demo .sidebar,
+  .mobile-demo .topbar,
+  .mobile-demo .mobile-intro,
+  .mobile-demo .stage-caption,
+  .mobile-demo .stage-disclaimer { display: none; }
+  .mobile-demo .main-area { min-height: 100vh; margin-left: 0; overflow-x: clip; }
+  .mobile-demo .content.mobile-content {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: clip;
+  }
+  .mobile-demo .mobile-stage { display: grid; width: 100%; min-width: 0; }
   .mobile-stage::before { display: none; }
-  .stage-caption, .stage-disclaimer { width: 100%; }
-
   .phone-device {
     width: 100%;
     padding: 0;
-    border-radius: 30px;
-    background: transparent;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
     box-shadow: none;
   }
-  .phone-frame { border-radius: 30px; box-shadow: 0 0 0 1px #0e22330d, 0 28px 50px -38px #0e223360; }
+  .phone-frame { border: 0; border-radius: 0; box-shadow: none; }
   .phone-screen {
-    height: min(780px, calc(100svh - 150px));
-    min-height: 540px;
-    border-radius: 30px;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
+    border-radius: 0;
   }
-  /* Faux éléments de téléphone inutiles sur un vrai téléphone */
   .phone-screen::before,
   .phone-statusbar,
   .phone-home-indicator,
   .phone-side-button { display: none; }
   .phone-appbar { flex-basis: 64px; padding-top: 8px; }
-  .phone-tabs { margin-bottom: 10px; }
+  .phone-tabs { margin-bottom: 0; }
 }
