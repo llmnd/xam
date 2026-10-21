@@ -35,7 +35,6 @@
 .mobile-demo .content.mobile-content::before{
   content:"";position:absolute;inset:0;z-index:-2;
   background:
-    radial-gradient(ellipse 40% 40% at 20% 20%,rgba(45,138,88,.14),transparent 70%),
     radial-gradient(ellipse 45% 45% at 82% 78%,rgba(11,47,79,.14),transparent 70%),
     radial-gradient(ellipse 60% 55% at 50% 50%,rgba(255,255,255,.85),transparent 65%)}
 .mobile-intro{display:none}
@@ -53,7 +52,6 @@
   height:min(820px,calc(100dvh - 100px));min-height:0;border-radius:52px;overflow:hidden;
   background:
     radial-gradient(120% 50% at 100% 0%,rgba(45,138,88,.10),transparent 60%),
-    radial-gradient(90% 40% at 0% 8%,rgba(11,47,79,.07),transparent 60%),
     var(--paper-warm);
   container-type:inline-size}
 .phone-screen::before{content:"";position:absolute;z-index:20;top:10px;left:50%;width:100px;height:28px;border-radius:20px;background:#0a1310;transform:translateX(-50%);pointer-events:none}
@@ -352,8 +350,6 @@ body.theme-dark.mobile-demo .phone-device{background:linear-gradient(155deg,#2a3
 .phone-device{
   background:linear-gradient(155deg,#fdfdfb,#d9ddd7 22%,#b9c0b9 48%,#d9ddd7 74%,#f7f7f3);
   box-shadow:var(--shadow-phone),0 0 0 1px rgba(11,47,79,.08),0 0 90px -20px var(--glow-green)}
-.phone-device::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
-  background:linear-gradient(135deg,rgba(255,255,255,.65),transparent 28%,transparent 72%,rgba(255,255,255,.45))}
 .phone-side-button{display:block;position:absolute;inset:0;pointer-events:none;z-index:0}
 .phone-side-button::before,.phone-side-button::after{content:"";position:absolute;width:4px;border-radius:3px;
   background:linear-gradient(90deg,#aeb5ae,#e9ece7 50%,#aeb5ae)}
@@ -367,7 +363,6 @@ body.theme-dark.mobile-demo .phone-device{background:linear-gradient(155deg,#2a3
 /* ── Fond aurore qui respire ──────────────────────────────────── */
 .phone-screen{background:
   radial-gradient(60% 34% at 88% 4%,rgba(45,138,88,.16),transparent 70%),
-  radial-gradient(55% 30% at 6% 12%,rgba(11,47,79,.10),transparent 70%),
   radial-gradient(70% 30% at 50% 100%,rgba(45,138,88,.08),transparent 70%),
   var(--paper-warm)}
 

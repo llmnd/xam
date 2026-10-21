@@ -20,6 +20,7 @@ const APP_FILES = [
   "./workflow-demo.js",
   "./presentation.js",
   "./assets/xamsamed-icon.svg",
+  "./assets/xamsamed-icon-180.png",
   "./assets/xamsamed-icon-192.png",
   "./assets/xamsamed-icon-512.png",
   "./assets/pharmacy-showcase-1.jpg",
