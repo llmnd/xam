@@ -6,7 +6,7 @@
   const clock = document.getElementById("phone-clock");
   const toast = document.getElementById("phone-toast");
   const pickerButtons = document.querySelectorAll("[data-preview]");
-  
+
   const state = {
     route: "home", tab: "home", role: "citizen", pharmacyFilter: "Toutes",
     query: "", selectedMedicine: "doliprane", selectedPharmacy: "plateau",
@@ -54,7 +54,7 @@
 
   function starRating(rating) {
     const value = parseFloat(String(rating).replace(",", "."));
-    return '<span class="rating-stars" aria-label="Note ' + rating + ' sur 5">' + 
+    return '<span class="rating-stars" aria-label="Note ' + rating + ' sur 5">' +
       Array.from({ length: 5 }, (_, i) => '<svg viewBox="0 0 24 24" class="' + (i < Math.round(value) ? "star-on" : "star-off") + '"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>').join("") + "</span>";
   }
 
@@ -117,51 +117,52 @@
     '</button>';
   }
 
- function pageHome() {
-  const open = pharmacies.filter((p) => p.open).length;
-  return '<section class="app-screen">' +
-    '<div class="home-greeting"><div>' +
-      '<p class="app-kicker" id="phone-date"></p>' +
-      '<h2 class="app-title">Bonjour, Awa</h2>' +
-      '<div class="location-caption">' + icon("pin") + "<span>Dakar, Sénégal</span></div></div>" +
-      '<span class="app-demo-label">DÉMO</span></div>' +
+  function pageHome() {
+    const open = pharmacies.filter((p) => p.open).length;
+    return '<section class="app-screen">' +
+      '<div class="home-greeting"><div>' +
+        '<p class="app-kicker" id="phone-date"></p>' +
+        '<h2 class="app-title">Bonjour, Awa</h2>' +
+        '<div class="location-caption">' + icon("pin") + "<span>Dakar, Sénégal</span></div></div>" +
+        '<span class="app-demo-label">DÉMO</span></div>' +
 
-    '<div class="duty-card">' +
-      '<div class="duty-label">Pharmacies ouvertes</div>' +
-      '<div class="duty-main"><strong>' + String(open).padStart(2, "0") + '</strong><span>près de vous<br>à Dakar ce soir</span></div>' +
-      '<div class="duty-foot"><span>Pharmacie du Plateau · 0,8 km</span>' +
-        '<button type="button" data-tab="map">Voir' + icon("arrowRight") + '</button></div></div>' +
+      '<div class="duty-card">' +
+        '<div class="duty-info">' +
+          '<div class="duty-label">Ouvertes ce soir</div>' +
+          '<div class="duty-main"><strong>' + String(open).padStart(2, "0") + '</strong><span>pharmacies près de vous</span></div>' +
+          '<p class="duty-sub">Pharmacie du Plateau · 0,8 km</p>' +
+        '</div>' +
+        '<button type="button" class="duty-go" data-tab="map" aria-label="Voir sur la carte">' + icon("arrowRight") + '</button>' +
+      '</div>' +
 
-    '<form class="app-search" id="medicine-search">' + icon("search") +
-      '<input name="query" aria-label="Rechercher un médicament" placeholder="Quel médicament recherchez-vous ?" value="' + escapeHtml(state.query) + '">' +
-      '<button type="submit" aria-label="Rechercher">' + icon("search") + "</button></form>" +
+      '<form class="app-search" id="medicine-search">' + icon("search") +
+        '<input name="query" aria-label="Rechercher un médicament" placeholder="Quel médicament recherchez-vous ?" value="' + escapeHtml(state.query) + '">' +
+        '<button type="submit" aria-label="Rechercher">' + icon("search") + "</button></form>" +
 
-    '<div class="app-section-head"><h3>Aperçu</h3><span class="app-demo-label">SIMULÉ</span></div>' +
-    '<div class="vitals">' +
-      '<div class="vital" style="--w:80%"><span>Disponibles</span><strong>' + medicines.filter((m) => !m.className).length + '<small> / ' + medicines.length + '</small></strong><i></i></div>' +
-      '<div class="vital" style="--w:66%"><span>Ouvertes</span><strong>' + open + '<small> / ' + pharmacies.length + '</small></strong><i></i></div>' +
-      '<div class="vital" style="--w:35%"><span>À vérifier</span><strong>' + medicines.filter((m) => m.className).length + '<small> méd.</small></strong><i></i></div></div>' +
+      '<div class="app-section-head"><h3>Aperçu</h3><span class="app-demo-label">SIMULÉ</span></div>' +
+      '<div class="vitals">' +
+        '<div class="vital" style="--w:80%"><span>Disponibles</span><strong>' + medicines.filter((m) => !m.className).length + '<small> / ' + medicines.length + '</small></strong><i></i></div>' +
+        '<div class="vital" style="--w:66%"><span>Ouvertes</span><strong>' + open + '<small> / ' + pharmacies.length + '</small></strong><i></i></div>' +
+        '<div class="vital" style="--w:35%"><span>À vérifier</span><strong>' + medicines.filter((m) => m.className).length + '<small> méd.</small></strong><i></i></div></div>' +
 
-    '<div class="app-section-head"><h3>Accès rapide</h3></div>' +
-    '<div class="category-row">' +
-      '<button type="button" class="category-button" data-tab="map"><span class="category-icon">' + icon("crosshair") + '</span>Carte</button>' +
-      '<button type="button" class="category-button" data-tab="profile"><span class="category-icon">' + icon("heart") + '</span>Favoris</button>' +
-      '<button type="button" class="category-button" data-route="bookings"><span class="category-icon">' + icon("medicine") + '</span>Réserv.</button>' +
-      '<button type="button" class="category-button" data-preview="alerts"><span class="category-icon">' + icon("alerts") + '</span>Hôpital</button></div>' +
+      '<div class="app-section-head"><h3>Accès rapide</h3></div>' +
+      '<div class="category-row">' +
+        '<button type="button" class="category-button" data-tab="map"><span class="category-icon">' + icon("crosshair") + '</span>Carte</button>' +
+        '<button type="button" class="category-button" data-tab="profile"><span class="category-icon">' + icon("heart") + '</span>Favoris</button>' +
+        '<button type="button" class="category-button" data-route="bookings"><span class="category-icon">' + icon("medicine") + '</span>Réserv.</button>' +
+        '<button type="button" class="category-button" data-preview="alerts"><span class="category-icon">' + icon("alerts") + '</span>Hôpital</button></div>' +
 
-    '<div class="app-section-head"><h3>Disponibles près de vous</h3>' +
-      '<button class="app-text-button" type="button" data-route="results">Tout voir' + icon("arrowRight") + '</button></div>' +
-    '<div class="med-list">' + medicines.slice(0, 2).map(medicineCard).join("") + '</div>' +
+      '<div class="app-section-head"><h3>Disponibles près de vous</h3>' +
+        '<button class="app-text-button" type="button" data-route="results">Tout voir' + icon("arrowRight") + '</button></div>' +
+      '<div class="med-list">' + medicines.slice(0, 2).map(medicineCard).join("") + '</div>' +
 
-    '<div class="app-section-head"><h3>Où les trouver</h3>' +
-      '<button class="app-text-button" type="button" data-route="pharmacies">Tout voir' + icon("arrowRight") + '</button></div>' +
-    '<div class="pharmacy-scroll">' + pharmacies.map(pharmacyMiniCard).join("") + '</div>' +
+      '<div class="app-section-head"><h3>Où les trouver</h3>' +
+        '<button class="app-text-button" type="button" data-route="pharmacies">Tout voir' + icon("arrowRight") + '</button></div>' +
+      '<div class="pharmacy-scroll">' + pharmacies.map(pharmacyMiniCard).join("") + '</div>' +
 
-    '<p class="update-caption">Démo · actualisée à l’instant</p></section>';
-}
+      '<p class="update-caption">Démo · actualisée à l’instant</p></section>';
+  }
 
-  // ... (Les autres pages : pageResults, pageMedicine, pagePharmacies, etc. restent identiques à la version précédente)
-  
   function pageResults() {
     const query = state.query.trim().toLocaleLowerCase("fr");
     const results = medicines.filter((item) => !query || (item.name + " " + item.detail).toLocaleLowerCase("fr").includes(query));
@@ -331,7 +332,7 @@
     if (target.dataset.filter) { state.pharmacyFilter = target.dataset.filter; render(); return; }
     if (target.dataset.alertFilter) { state.alertFilter = target.dataset.alertFilter; render(); return; }
     if (target.dataset.alert) { state.selectedAlert = target.dataset.alert; state.route = "alert"; render(); return; }
-    
+
     if (target.dataset.action === "reserve") {
       state.bookings += 1; showToast("Réservation ajoutée à la maquette.");
       state.route = "bookings"; state.tab = "profile"; render();
